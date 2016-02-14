@@ -29,27 +29,27 @@ func printHelp() {
 func setColorRGBW(){
 	guard Process.arguments.count == 6 else	 { // self + command + 4 arguments = 6
 		print("[Error] Wrong number of arguments! Needs [red] [green] [blue] [white]")
-		exit(0)
+		exit(1)
 	}
 
 	guard let red = Int(Process.arguments[2]) where (0...255).contains(red) else {
 		print("[Error] Red value (\(Process.arguments[2])) is not an Int or out of range (0-255)")
-		exit(0)
+		exit(1)
 	}
 	
 	guard let green  = Int(Process.arguments[3]) where (0...255).contains(green) else {
 		print("[Error] Green value (\(Process.arguments[3])) is not an Int or out of range (0-255)")
-		exit(0)
+		exit(1)
 	}
 	
 	guard let blue  = Int(Process.arguments[4]) where (0...255).contains(blue) else {
 		print("[Error] Blue value (\(Process.arguments[4])) is not an Int or out of range (0-255)")
-		exit(0)
+		exit(1)
 	}
 	
 	guard let white = Int(Process.arguments[5]) where (0...255).contains(white) else {
 		print("[Error] White value (\(Process.arguments[5])) is not an Int or out of range (0-255)")
-		exit(0)
+		exit(1)
 	}
 
 	Avea().setColor(red: red, green: green, blue: blue, white: white)
@@ -66,7 +66,7 @@ func setColorRGBW(){
 
 guard Process.arguments.count > 1 else {
 	printHelp()
-	exit(0)
+	exit(1)
 }
 
 
