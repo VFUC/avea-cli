@@ -7,18 +7,18 @@ func printHelp() {
 
 	print("Usage options:\n")
 
-	print(" rgbw [red] [green] [blue] [white]")
-	print(" set-color-rgbw [red] [green] [blue] [white]")
+	print(" avea rgbw [red] [green] [blue] [white]")
+	print(" avea set-color-rgbw [red] [green] [blue] [white]")
 	print("\t\tSet color according to red, green, blue and white value in range of 0-255\n")	
 	
-	print(" c [descriptor]")
-	print(" set-color [descriptor]")
+	print(" avea c [descriptor]")
+	print(" avea set-color [descriptor]")
 	print("\t\tSet color using color descriptor\n")
 
-	print(" show-colors")
+	print(" avea show-colors")
 	print("\t\t Show all color descriptors\n")
 
-	print(" help")
+	print(" avea help")
 	print("\t\t Show this help\n")
 
 
@@ -79,6 +79,6 @@ switch Process.arguments[1] {
 		printHelp()
 	
 	default:
-		print("Argument not recognized! Use -help for more information")
+		print("Argument not recognized! Use avea help for more information")
 }
 
