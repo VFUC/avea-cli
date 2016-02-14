@@ -7,18 +7,18 @@ func printHelp() {
 
 	print("Usage options:\n")
 
-	print(" -rgbw [red] [green] [blue] [white]")
-	print(" --set-color-rgbw [red] [green] [blue] [white]")
+	print(" rgbw [red] [green] [blue] [white]")
+	print(" set-color-rgbw [red] [green] [blue] [white]")
 	print("\t\tSet color according to red, green, blue and white value in range of 0-255\n")	
 	
-	print(" -c [descriptor]")
-	print(" --set-color [descriptor]")
+	print(" c [descriptor]")
+	print(" set-color [descriptor]")
 	print("\t\tSet color using color descriptor\n")
 
-	print(" --show-colors")
+	print(" show-colors")
 	print("\t\t Show all color descriptors\n")
 
-	print(" -help")
+	print(" help")
 	print("\t\t Show this help\n")
 
 
@@ -72,10 +72,10 @@ guard Process.arguments.count > 1 else {
 
 switch Process.arguments[1] {
 
-	case "-rgbw", "--set-color-rgbw":
+	case "rgbw", "set-color-rgbw":
 		setColorRGBW()
 	
-	case "-help":
+	case "help":
 		printHelp()
 	
 	default:
