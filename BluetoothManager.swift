@@ -21,6 +21,7 @@ class BluetoothManager: NSObject {
 	private var aveaPeripheral : CBPeripheral? {
 		didSet {
 			if let avea = aveaPeripheral {
+				print("[CentralManager] Connecting to peripheral")
 				centralManager?.connectPeripheral(avea, options: nil)
 			}
 		}
@@ -43,6 +44,7 @@ extension BluetoothManager : CBCentralManagerDelegate {
 	func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
 		
 		if let name = peripheral.name where name.containsString("Avea"){
+			print("[CentralManager] Discovered peripheral \'\(name)\'")
 			aveaPeripheral = peripheral
 		}
 		
@@ -54,7 +56,7 @@ extension BluetoothManager : CBCentralManagerDelegate {
 		
 		if (central.state == CBCentralManagerState.PoweredOn){
 			centralManager?.scanForPeripheralsWithServices(nil, options: nil)
-			print("[CentralManager] Scanning for Peripherals")
+			print("[CentralManager] Scanning for peripherals")
 		}
 	}
 	
