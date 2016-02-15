@@ -27,7 +27,7 @@ The implementation wouldn't be possible without knowing the details of which byt
 If you're feeling crazy you can 
 - Copy it to `/usr/local/bin` to be able to run it everywhere : 
 
-`$ sudo cp avea /usr/local/bin`
+`$ sudo cp avea /usr/local/bin/`
 
 ## 🎛 Usage
 
