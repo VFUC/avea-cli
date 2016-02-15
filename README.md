@@ -30,7 +30,7 @@ If you're feeling crazy you can
 
 ## 🎛 Usage
 
-### Setting the color
+##### Setting the color
 The color is set using **red**, **green**, **blue** and **white** values in the range of 0-255 with the `set-color-rgbw` command or its short form `rgbw`. 
  
 ```sh
@@ -38,7 +38,7 @@ $ avea set-color-rgbw [red] [green] [blue] [white]
 $ avea rgbw [red] [green] [blue] [white]
 ```
 
-#### Turn the bulb off
+##### Turn the bulb off
 ```sh
 $ avea off
 ```
