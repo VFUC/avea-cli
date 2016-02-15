@@ -9,7 +9,7 @@
 import Foundation
 import CoreBluetooth
 
-struct Constants {
+private struct Constants {
 	static let ColorServiceUUID = "F815E810-456C-6761-746F-4D756E696368"
 	static let ColorCharacteristicUUID = "F815E811-456C-6761-746F-4D756E696368"
 }
