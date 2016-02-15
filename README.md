@@ -10,7 +10,7 @@ The implementation wouldn't be possible without knowing the details of which byt
 
 
 ## 🛠 Setup
-** XCode is required to compile the executable **
+**Note: XCode is required to compile the executable**
 
 - Clone the repo
 
