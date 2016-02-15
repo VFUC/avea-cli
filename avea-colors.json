@@ -1,0 +1,25 @@
+{
+  "colors": [
+    {
+      "title": "blue",
+      "red": 0,
+      "green": 0,
+      "blue": 255,
+      "white": 30
+    },
+    {
+      "title": "green",
+      "red": 0,
+      "green": 255,
+      "blue": 0,
+      "white": 30
+    },
+    {
+      "title": "red",
+      "red": 255,
+      "green": 0,
+      "blue": 0,
+      "white": 30
+    }
+  ]
+}
