@@ -34,6 +34,12 @@ func printHelp() {
 	print(" avea show-colors")
 	print("\t\t Show all color descriptors\n")
 
+	print(" avea add-color [name] [red] [green] [blue] [white]")
+	print("\t\t Add color descriptor with associated RGBW values\n")
+
+	print(" avea delete-color [name]")
+	print("\t\t Delete a color descriptor\n")
+
 	print(" avea help")
 	print("\t\t Show this help\n")
 
@@ -78,7 +84,7 @@ func getColorsFromFile() -> [Color]? {
 		print("[Error] Can't read colors from file! Make sure \"\(Constants.ColorDescriptorFile)\" exists and is valid JSON.")
 		return nil
 	}
-		
+	
 	do {
 		let json = try NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers)		
 		guard let results = json["colors"] as? NSArray else {
@@ -153,16 +159,93 @@ func showColorDescriptors(){
 	}
 }
 
+func getJSONDataForColors(colors: [Color]) -> NSData? {
+	var colorDicts = [[String : AnyObject]]()
+	
+	for color in colors {
+		var colorDict = [String : AnyObject]()
+		colorDict["title"] = color.title
+		colorDict["red"] = color.red
+		colorDict["green"] = color.green
+		colorDict["blue"] = color.blue
+		colorDict["white"] = color.white
+		colorDicts.append(colorDict)
+	}
 
+	let colorsJSON = [ "colors" : colorDicts ]
 
+	var data: NSData
+	do {
+		data = try NSJSONSerialization.dataWithJSONObject(colorsJSON, options: NSJSONWritingOptions())
+	} catch let error {
+		print("Error converting Colors to JSON - \(error)")
+		return nil
+	}
 
+	return data
+}
+
+func addColor(){
+	guard Process.arguments.count == 7 else { // self + command + 5 arguments = 7
+		print("[Error] Wrong number of arguments! See help for usage details")
+		exit(1)
+	}
+
+	let title = Process.arguments[2]	
+	
+	guard let red = Int(Process.arguments[3]) where (0...255).contains(red) else {
+		print("[Error] Red value (\(Process.arguments[3])) is not an Int or out of range (0-255)")
+		exit(1)
+	}
+	
+	guard let green  = Int(Process.arguments[4]) where (0...255).contains(green) else {
+		print("[Error] Green value (\(Process.arguments[4])) is not an Int or out of range (0-255)")
+		exit(1)
+	}
+	
+	guard let blue  = Int(Process.arguments[5]) where (0...255).contains(blue) else {
+		print("[Error] Blue value (\(Process.arguments[5])) is not an Int or out of range (0-255)")
+		exit(1)
+	}
+	
+	guard let white = Int(Process.arguments[6]) where (0...255).contains(white) else {
+		print("[Error] White value (\(Process.arguments[6])) is not an Int or out of range (0-255)")
+		exit(1)
+	}
+	
+	let addedColor = Color(title: title, red: red, green: green, blue: blue, white: white)
+	
+	guard let colors = getColorsFromFile() else {
+		print("Can't get colors from file, exiting")
+		exit(1)
+	}
+
+	for color in colors where color.title == addedColor.title {
+		print("[Error] Color with name \'\(addedColor.title)\' exists already, use \'avea delete-color [name]\' to remove it first")
+		exit(1)
+	}
+	
+	var newColors = colors
+	newColors.append(addedColor)
+
+	guard let jsonData = getJSONDataForColors(newColors) else {
+		exit(1)
+	}
+	
+	guard let fileHandle = NSFileHandle(forUpdatingAtPath: Constants.ColorDescriptorFile) else {
+		print("[Error] Can't write to color JSON file, exiting")
+		exit(1)
+	}
+
+	fileHandle.truncateFileAtOffset(0) //Delete current file contents 
+	fileHandle.writeData(jsonData)
+	print("[\(addedColor.title)] added to colors")
+}
 
 
 
 
 /* MAIN */
-
-
 
 guard Process.arguments.count > 1 else {
 	printHelp()
@@ -181,6 +264,9 @@ switch Process.arguments[1] {
 	case "show-colors":
 		showColorDescriptors()
 	
+	case "add-color":
+		addColor()
+		
 	case "help":
 		printHelp()
 	
