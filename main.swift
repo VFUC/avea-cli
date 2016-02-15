@@ -48,6 +48,7 @@ func printHelp() {
 	print("vfuc.co")
 }
 
+
 func setColorUsingRGBW(){
 	guard Process.arguments.count == 6 else	 { // self + command + 4 arguments = 6
 		print("[Error] Wrong number of arguments! Needs [red] [green] [blue] [white]")
@@ -124,6 +125,7 @@ func getColorsFromFile() -> [Color]? {
 	}
 }
 
+
 func setColorUsingDescriptor(){
 	guard Process.arguments.count == 3 else	 { // self + command + 1 arguments = 3
 		print("[Error] Wrong number of arguments! See help for usage details")
@@ -159,6 +161,7 @@ func showColorDescriptors(){
 	}
 }
 
+
 func getJSONDataForColors(colors: [Color]) -> NSData? {
 	var colorDicts = [[String : AnyObject]]()
 	
@@ -184,6 +187,7 @@ func getJSONDataForColors(colors: [Color]) -> NSData? {
 
 	return data
 }
+
 
 func addColor(){
 	guard Process.arguments.count == 7 else { // self + command + 5 arguments = 7
@@ -221,11 +225,11 @@ func addColor(){
 	}
 
 	for color in colors where color.title == addedColor.title {
-		print("[Error] Color with name \'\(addedColor.title)\' exists already, use \'avea delete-color [name]\' to remove it first")
+		print("[Error] Color with name \'\(addedColor.title)\' exists already, use \'avea delete-color \(addedColor.title)\' to remove it first")
 		exit(1)
 	}
 	
-	var newColors = colors
+	var newColors = colors //mutable copy
 	newColors.append(addedColor)
 
 	guard let jsonData = getJSONDataForColors(newColors) else {
@@ -241,6 +245,46 @@ func addColor(){
 	fileHandle.writeData(jsonData)
 	print("[\(addedColor.title)] added to colors")
 }
+
+
+func deleteColor(){
+	guard Process.arguments.count == 3 else { // self + command + 1 argument = 3
+		print("[Error] Wrong number of arguments! See help for usage details")
+		exit(1)
+	}
+
+	let title = Process.arguments[2]
+
+	guard let colors = getColorsFromFile() else {
+		print("Can't get colors from file, exiting")
+		exit(1)
+	}
+
+	var newColors = colors //mutable copy
+
+	for (index, color) in colors.enumerate() where color.title == title {
+		newColors.removeAtIndex(index)
+	}
+
+	guard newColors.count < colors.count else { //no color removed
+		print("[Error] No color found with name \'\(title)\', check saved colors using \'avea show-colors\'")
+		exit(1)
+	}
+
+	guard let jsonData = getJSONDataForColors(newColors) else {
+		exit(1)
+	}
+	
+	guard let fileHandle = NSFileHandle(forUpdatingAtPath: Constants.ColorDescriptorFile) else {
+		print("[Error] Can't write to color JSON file, exiting")
+		exit(1)
+	}
+
+	fileHandle.truncateFileAtOffset(0) //Delete current file contents 
+	fileHandle.writeData(jsonData)
+	print("[\(title)] removed from colors")
+}
+
 
 
 
@@ -266,6 +310,9 @@ switch Process.arguments[1] {
 	
 	case "add-color":
 		addColor()
+
+	case "delete-color":
+		deleteColor()
 		
 	case "help":
 		printHelp()
