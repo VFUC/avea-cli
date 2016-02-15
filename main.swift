@@ -42,7 +42,7 @@ func printHelp() {
 	print("vfuc.co")
 }
 
-func setColorRGBW(){
+func setColorUsingRGBW(){
 	guard Process.arguments.count == 6 else	 { // self + command + 4 arguments = 6
 		print("[Error] Wrong number of arguments! Needs [red] [green] [blue] [white]")
 		exit(1)
@@ -118,7 +118,7 @@ func getColorsFromFile() -> [Color]? {
 	}
 }
 
-func setColorDescriptor(){
+func setColorUsingDescriptor(){
 	guard Process.arguments.count == 3 else	 { // self + command + 1 arguments = 3
 		print("[Error] Wrong number of arguments! See help for usage details")
 		exit(1)
@@ -141,6 +141,17 @@ func setColorDescriptor(){
 }
 
 
+func showColorDescriptors(){
+	guard let colors = getColorsFromFile() else {
+		print("Colors not loaded, exiting")
+		exit(1)
+	}
+
+	print("Available colors: \n")
+	for color in colors {
+		print("[\(color.title)] Red: \(color.red), Green: \(color.green), Blue: \(color.blue), White: \(color.white)")
+	}
+}
 
 
 
@@ -162,11 +173,13 @@ guard Process.arguments.count > 1 else {
 switch Process.arguments[1] {
 
 	case "rgbw", "set-color-rgbw":
-		setColorRGBW()
+		setColorUsingRGBW()
 	
 	case "c", "set-color":
-		setColorDescriptor()
-		
+		setColorUsingDescriptor()
+	
+	case "show-colors":
+		showColorDescriptors()
 	
 	case "help":
 		printHelp()
