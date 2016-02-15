@@ -26,6 +26,9 @@ func printHelp() {
 	print(" avea rgbw [red] [green] [blue] [white]")
 	print(" avea set-color-rgbw [red] [green] [blue] [white]")
 	print("\t\tSet color according to red, green, blue and white value in range of 0-255\n")	
+
+	print(" avea off")
+	print("\t\t Turn avea off\n")
 	
 	print(" avea c [descriptor]")
 	print(" avea set-color [descriptor]")
@@ -42,7 +45,6 @@ func printHelp() {
 
 	print(" avea help")
 	print("\t\t Show this help\n")
-
 
 	print("\n\ngithub.com/vfuc/avea-cli")
 	print("vfuc.co")
@@ -79,6 +81,10 @@ func setColorUsingRGBW(){
 	Avea().setColor(red: red, green: green, blue: blue, white: white)
 }
 
+func turnOff(){
+	print("[turnOff] Turning off Avea")
+	Avea().setColor(red: 0, green: 0, blue: 0, white: 0)
+}
 
 func getColorsFromFile() -> [Color]? {
 	guard let data = NSData(contentsOfFile: Constants.ColorDescriptorFile) else {
@@ -304,6 +310,9 @@ switch Process.arguments[1] {
 	
 	case "c", "set-color":
 		setColorUsingDescriptor()
+
+	case "off":
+		turnOff()
 	
 	case "show-colors":
 		showColorDescriptors()
