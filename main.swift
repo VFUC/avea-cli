@@ -5,7 +5,8 @@ import Foundation
 
 
 private struct Constants {
-	static let ColorDescriptorFile = "avea-colors.json"	
+	static let AveaDirectoryPath = "~/.avea"
+	static let ColorDescriptorFile = "avea-colors.json"
 }
 
 struct Color {
@@ -16,11 +17,18 @@ struct Color {
 	let white: Int
 }
 
+let defaultColors = [
+	Color(title: "blue", red: 0, green: 30, blue: 255, white: 30),
+	Color(title: "green", red: 0, green: 255, blue: 0, white: 30)
+]
 
 /* FUNCTIONS */
 
 func getColorsFromFile() -> [Color]? {
-	guard let data = NSData(contentsOfFile: Constants.ColorDescriptorFile) else {
+	let directoryPath = NSString(string: Constants.AveaDirectoryPath).stringByExpandingTildeInPath
+	let filePath = directoryPath.stringByAppendingString("/\(Constants.ColorDescriptorFile)")
+
+	guard let data = NSData(contentsOfFile: filePath) else {
 		print("[Error] Can't read colors from file! Make sure \"\(Constants.ColorDescriptorFile)\" exists and is valid JSON.")
 		return nil
 	}
@@ -90,9 +98,54 @@ func getJSONDataForColors(colors: [Color]) -> NSData? {
 	return data
 }
 
+// Returns true if directory is setup and valid
+func setupAveaDirectory() -> Bool {
+	let fileManager = NSFileManager.defaultManager()
+	let directoryPath = NSString(string: Constants.AveaDirectoryPath).stringByExpandingTildeInPath
+
+	var isDirectory : ObjCBool = false
+
+	if fileManager.fileExistsAtPath(directoryPath, isDirectory: &isDirectory) {
+		if isDirectory {
+			return true
+		} else {
+			print("[Error] File exists at specified Avea directory location \'\(directoryPath)\'\nRemove file or change directory path in script.")
+			exit(1)
+		}
+	}	else { // Nothing at path, create directory
+		do {
+			try fileManager.createDirectoryAtPath(directoryPath, withIntermediateDirectories: true, attributes: nil)
+			print("[main] Created Avea directory at path \'\(directoryPath)\'")
+			return true
+		} catch let error {
+			print("Error creating Avea directory: \(error)")
+			exit(1)
+		}
+	}
+}
 
 
+func setUpColorFile() -> Bool {
+	let fileManager = NSFileManager.defaultManager()
+	let directoryPath = NSString(string: Constants.AveaDirectoryPath).stringByExpandingTildeInPath
+	let colorFilePath = directoryPath.stringByAppendingString("/\(Constants.ColorDescriptorFile)")
 
+	if fileManager.fileExistsAtPath(colorFilePath) {
+		return !(getColorsFromFile() == nil)
+	} else { // file doesn't exist, create file
+		if fileManager.createFileAtPath(colorFilePath, contents: getJSONDataForColors(defaultColors)!, attributes: nil) {
+			print("[main] Created color file \'\(colorFilePath)\'")
+			return true
+		} else {
+			print("Couldn't create avea color file at path \'\(colorFilePath)\'")
+			exit(1)
+		}
+	}
+}
+
+func setupAveaFiles() -> Bool {
+	return setUpColorFile()
+}
 
 
 
@@ -309,6 +362,18 @@ func printHelp() {
 
 
 /* MAIN */
+
+guard setupAveaDirectory() else {
+	print("[Error] Avea directory not setup correctly, exiting.")
+	exit(1)
+}
+
+guard setupAveaFiles() else {
+	print("[Error] Avea files not setup correctly, exiting.")
+	exit(1)
+}
+
+
 
 guard Process.arguments.count > 1 else {
 	printHelp()
