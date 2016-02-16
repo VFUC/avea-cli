@@ -7,6 +7,7 @@ import Foundation
 private struct Constants {
 	static let AveaDirectoryPath = "~/.avea"
 	static let ColorDescriptorFile = "avea-colors.json"
+	static let PeripheralUUIDFile = "avea-uuids.txt"
 }
 
 struct Color {
@@ -124,7 +125,7 @@ func setupAveaDirectory() -> Bool {
 	}
 }
 
-
+// Returns true if color file exists and JSON parseable / has been created
 func setUpColorFile() -> Bool {
 	let fileManager = NSFileManager.defaultManager()
 	let directoryPath = NSString(string: Constants.AveaDirectoryPath).stringByExpandingTildeInPath
@@ -143,8 +144,28 @@ func setUpColorFile() -> Bool {
 	}
 }
 
+// Returns true if periheral id file exists/has been created
+func setUpPeripheralUUIDFile() -> Bool {
+	let fileManager = NSFileManager.defaultManager()
+	let directoryPath = NSString(string: Constants.AveaDirectoryPath).stringByExpandingTildeInPath
+	let idFilePath = directoryPath.stringByAppendingString("/\(Constants.PeripheralUUIDFile)")
+
+	if fileManager.fileExistsAtPath(idFilePath) {
+		return true
+	} else { // file doesn't exist, create file
+		if fileManager.createFileAtPath(idFilePath, contents: nil, attributes: nil) {
+			print("[main] Created peripheral ID file \'\(idFilePath)\'")
+			return true
+		} else {
+			print("Couldn't create peripheral ID file at path \'\(idFilePath)\'")
+			exit(1)
+		}
+	}
+}
+
+
 func setupAveaFiles() -> Bool {
-	return setUpColorFile()
+	return setUpColorFile() && setUpPeripheralUUIDFile()
 }
 
 
