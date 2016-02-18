@@ -29,6 +29,8 @@ class BluetoothManager: NSObject {
 	
 	private var bytesToSend : [UInt8]?
 	private var completionHandler : (Void -> Void)?
+	var peripheralUUIDs : [String]? = nil
+	var newUUIDHandler : (String -> Void)?
 	
 	func sendBytes(bytes: [UInt8], completionHandler : (Void -> Void)? = nil){
 		bytesToSend = bytes
@@ -45,6 +47,7 @@ extension BluetoothManager : CBCentralManagerDelegate {
 		
 		if let name = peripheral.name where name.containsString("Avea"){
 			print("[CentralManager] Discovered peripheral \'\(name)\'")
+			newUUIDHandler?(peripheral.identifier.UUIDString)
 			aveaPeripheral = peripheral
 		}
 		
@@ -55,8 +58,29 @@ extension BluetoothManager : CBCentralManagerDelegate {
 		print("[CentralManager] State: \(central.state)")
 		
 		if (central.state == CBCentralManagerState.PoweredOn){
-			centralManager?.scanForPeripheralsWithServices(nil, options: nil)
-			print("[CentralManager] Scanning for peripherals")
+			print("[CentralManager] Powered On")
+			
+			if let uuidStrings = peripheralUUIDs {
+				var uuids = [NSUUID]()
+				for uuidString in uuidStrings {
+					uuids.append(NSUUID(UUIDString: uuidString)!)
+				}
+				
+				let peripherals = centralManager?.retrievePeripheralsWithIdentifiers(uuids)
+				if let peripherals = peripherals where peripherals.count > 0 {
+					print("[CentralManager] Retrieved peripheral from stored UUIDs")
+					aveaPeripheral = peripherals.first!
+					
+				} else {
+					print("[CentralManager] Scanning for peripherals")
+					centralManager?.scanForPeripheralsWithServices(nil, options: nil)
+				}
+				
+				
+			} else {
+				print("[CentralManager] Scanning for peripherals")
+				centralManager?.scanForPeripheralsWithServices(nil, options: nil)
+			}
 		}
 	}
 	

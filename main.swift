@@ -169,6 +169,67 @@ func setupAveaFiles() -> Bool {
 }
 
 
+func getUUIDSFromFile() -> [String]? {
+	let directoryPath = NSString(string: Constants.AveaDirectoryPath).stringByExpandingTildeInPath
+	let idFilePath = directoryPath.stringByAppendingString("/\(Constants.PeripheralUUIDFile)")
+	
+	guard let data = NSData(contentsOfFile: idFilePath) else {
+		print("[Error] Can't read peripheral ids from id file! Make sure \"\(idFilePath)\" exists")
+		return nil
+	}
+	
+	guard let dataString = String(data: data, encoding: NSUTF8StringEncoding) else {
+		print("[Error] Can't parse periherpal id file data to String!")
+		return nil
+	}
+	let components = dataString.componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
+	var uuids = [String]()
+	
+	for component in components where component.characters.count > 0 {
+		uuids.append(component)
+	}
+	
+	return uuids
+}
+
+func writeUUIDsToFile(uuids: [String]) {
+	let directoryPath = NSString(string: Constants.AveaDirectoryPath).stringByExpandingTildeInPath
+	let idFilePath = directoryPath.stringByAppendingString("/\(Constants.PeripheralUUIDFile)")
+
+	guard let fileHandle = NSFileHandle(forUpdatingAtPath: idFilePath) else {
+		print("[Error] Can't write to peripheral uuid file, exiting")
+		exit(1)
+	}
+
+	var writeString = ""
+	for (index,uuid) in uuids.enumerate() {
+		if index != 0 {
+			writeString.appendContentsOf("\n")
+		}
+
+		writeString.appendContentsOf(uuid)
+	}
+
+	guard let data = writeString.dataUsingEncoding(NSUTF8StringEncoding) else {
+		print("[ERROR] Can't get data from peripheral id string, exiting!")
+		exit(1)
+	}
+
+	fileHandle.truncateFileAtOffset(0) //Delete current file contents 
+	fileHandle.writeData(data)
+}
+
+func addNewPeripheralUUIDToFile(uuid: String) {
+	var ids = [uuid]
+	
+	if let existingIDs = getUUIDSFromFile() {
+		ids.appendContentsOf(existingIDs)
+	}
+	
+	print("[main] Stored new peripheral UUID \'\(uuid)\'")
+	writeUUIDsToFile(ids)
+}
+
 
 
 
@@ -201,8 +262,8 @@ func setColorUsingRGBW(){
 		exit(1)
 	}
 	
-	print("[setColor] Red: \(red), Green: \(green), Blue: \(blue), White: \(white)")		
-	Avea().setColor(red: red, green: green, blue: blue, white: white)
+	print("[setColor] Red: \(red), Green: \(green), Blue: \(blue), White: \(white)")
+	Avea().setColor(red: red, green: green, blue: blue, white: white, peripheralUUIDS: getUUIDSFromFile(), newPeripheralHandler: addNewPeripheralUUIDToFile)
 }
 
 // "c", "set-color"
@@ -221,7 +282,7 @@ func setColorUsingDescriptor(){
 
 	for color in colors where color.title == input {
 		print("[setColor] \(input) - Red: \(color.red), Green: \(color.green), Blue: \(color.blue), White: \(color.white)")		
-		Avea().setColor(red: color.red, green: color.green, blue: color.blue, white: color.white)
+		Avea().setColor(red: color.red, green: color.green, blue: color.blue, white: color.white, peripheralUUIDS: getUUIDSFromFile(), newPeripheralHandler: addNewPeripheralUUIDToFile)
 		return
 	}
 
@@ -230,8 +291,8 @@ func setColorUsingDescriptor(){
 
 // "off"
 func turnOff(){
-	print("[turnOff] Turning off Avea")
-	Avea().setColor(red: 0, green: 0, blue: 0, white: 0)
+	print("[main] Turning off Avea")
+	Avea().setColor(red: 0, green: 0, blue: 0, white: 0, peripheralUUIDS: getUUIDSFromFile(), newPeripheralHandler: addNewPeripheralUUIDToFile)
 }
 
 // "show-colors"
@@ -279,7 +340,7 @@ func addColor(){
 	let addedColor = Color(title: title, red: red, green: green, blue: blue, white: white)
 	
 	guard let colors = getColorsFromFile() else {
-		print("Can't get colors from file, exiting")
+		print("[Error] Can't get colors from file, exiting")
 		exit(1)
 	}
 
@@ -294,15 +355,18 @@ func addColor(){
 	guard let jsonData = getJSONDataForColors(newColors) else {
 		exit(1)
 	}
+
+	let directoryPath = NSString(string: Constants.AveaDirectoryPath).stringByExpandingTildeInPath
+	let colorFilePath = directoryPath.stringByAppendingString("/\(Constants.ColorDescriptorFile)")
 	
-	guard let fileHandle = NSFileHandle(forUpdatingAtPath: Constants.ColorDescriptorFile) else {
+	guard let fileHandle = NSFileHandle(forUpdatingAtPath: colorFilePath) else {
 		print("[Error] Can't write to color JSON file, exiting")
 		exit(1)
 	}
 
 	fileHandle.truncateFileAtOffset(0) //Delete current file contents 
 	fileHandle.writeData(jsonData)
-	print("[\(addedColor.title)] added to colors")
+	print("[main] \'\(addedColor.title)\' added to colors")
 }
 
 // "delete-color"
@@ -315,7 +379,7 @@ func deleteColor(){
 	let title = Process.arguments[2]
 
 	guard let colors = getColorsFromFile() else {
-		print("Can't get colors from file, exiting")
+		print("[Error] Can't get colors from file, exiting")
 		exit(1)
 	}
 
@@ -334,14 +398,18 @@ func deleteColor(){
 		exit(1)
 	}
 	
-	guard let fileHandle = NSFileHandle(forUpdatingAtPath: Constants.ColorDescriptorFile) else {
+
+	let directoryPath = NSString(string: Constants.AveaDirectoryPath).stringByExpandingTildeInPath
+	let colorFilePath = directoryPath.stringByAppendingString("/\(Constants.ColorDescriptorFile)")
+
+	guard let fileHandle = NSFileHandle(forUpdatingAtPath: colorFilePath) else {
 		print("[Error] Can't write to color JSON file, exiting")
 		exit(1)
 	}
 
 	fileHandle.truncateFileAtOffset(0) //Delete current file contents 
 	fileHandle.writeData(jsonData)
-	print("[\(title)] removed from colors")
+	print("[main] \'\(title)\' removed from colors")
 }
 
 // "help"

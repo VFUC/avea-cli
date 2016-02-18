@@ -12,12 +12,16 @@ class Avea {
 	var bluetoothManager = BluetoothManager()
 	var running = false
 	
-	func setColor(red red: Int, green: Int, blue: Int, white: Int){
+	func setColor(red red: Int, green: Int, blue: Int, white: Int, peripheralUUIDS : [String]? = nil, newPeripheralHandler : (String -> Void)? = nil){
 		running = true
 		let sem = dispatch_semaphore_create(0);
 		
+		bluetoothManager.peripheralUUIDs = peripheralUUIDS
+		bluetoothManager.newUUIDHandler = { uuid in
+			newPeripheralHandler?(uuid)
+		}
 		
-		self.bluetoothManager.sendBytes(self.composeArrayWithColors(white: white, red: red, green: green, blue: blue), completionHandler: {
+		bluetoothManager.sendBytes(composeArrayWithColors(white: white, red: red, green: green, blue: blue), completionHandler: {
 			
 			dispatch_semaphore_signal(sem)
 		})
