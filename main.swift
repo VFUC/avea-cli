@@ -261,7 +261,7 @@ func setColorUsingRGBW(){
 	}
 	
 	print("[setColor] Red: \(red), Green: \(green), Blue: \(blue), White: \(white)")
-	Avea().setColor(Color(red: red, green: green, blue: blue, white: white), peripheralUUIDS: getUUIDSFromFile(), newPeripheralHandler: addNewPeripheralUUIDToFile)
+	Avea().setColor(Color(red: red, green: green, blue: blue, white: white), peripheralUUIDs: getUUIDSFromFile(), newPeripheralHandler: addNewPeripheralUUIDToFile)
 }
 
 // "c", "set-color"
@@ -280,17 +280,37 @@ func setColorUsingDescriptor(){
 	
 	for colorDescriptor in colorDescriptors where colorDescriptor.title == input {
 		print("[setColor] \(input) - Red: \(colorDescriptor.color.red), Green: \(colorDescriptor.color.green), Blue: \(colorDescriptor.color.blue), White: \(colorDescriptor.color.white)")
-		Avea().setColor(colorDescriptor.color, peripheralUUIDS: getUUIDSFromFile(), newPeripheralHandler: addNewPeripheralUUIDToFile)
+		Avea().setColor(colorDescriptor.color, peripheralUUIDs: getUUIDSFromFile(), newPeripheralHandler: addNewPeripheralUUIDToFile)
 		return
 	}
 	
 	print("[Error] Color Descriptor not recognized! Show available colors using \'avea show-colors\'")
 }
 
+
+// "b", "set-brightness"
+func setBrightness(){
+	guard Process.arguments.count == 3 else	 { // self + command + 1 argument = 3
+		print("[Error] Wrong number of arguments! See help for usage details")
+		exit(1)
+	}
+	
+	
+	guard let brightness = Int(Process.arguments[2]) where (0...255).contains(brightness) else {
+		print("[Error] Brightness value (\(Process.arguments[2])) is not an Int or out of range (0-255)")
+		exit(1)
+	}
+	
+	print("[setBrightness] Setting brightness to \(brightness)/255")
+	
+	Avea().setBrightness(brightness, peripheralUUIDs: getUUIDSFromFile(), newPeripheralHandler: addNewPeripheralUUIDToFile)
+}
+
+
 // "off"
 func turnOff(){
 	print("[main] Turning off Avea")
-	Avea().setColor(Color(red: 0, green: 0, blue: 0, white: 0), peripheralUUIDS: getUUIDSFromFile(), newPeripheralHandler: addNewPeripheralUUIDToFile)
+	Avea().setColor(Color(red: 0, green: 0, blue: 0, white: 0), peripheralUUIDs: getUUIDSFromFile(), newPeripheralHandler: addNewPeripheralUUIDToFile)
 }
 
 // "show-colors"
@@ -420,6 +440,10 @@ func printHelp() {
 	print(" avea set-color-rgbw [red] [green] [blue] [white]")
 	print("\t\tSet color according to red, green, blue and white value in range of 0-255\n")
 	
+	print(" avea b [brightness]")
+	print(" avea set-brightness [brightness]")
+	print("\t\t Set brightness of bulb to value in range of 0-255\n")
+	
 	print(" avea off")
 	print("\t\t Turn avea off\n")
 	
@@ -462,7 +486,6 @@ guard setupAveaFiles() else {
 }
 
 
-
 guard Process.arguments.count > 1 else {
 	printHelp()
 	exit(1)
@@ -476,6 +499,9 @@ case "rgbw", "set-color-rgbw":
 	
 case "c", "set-color":
 	setColorUsingDescriptor()
+	
+case "b", "set-brightness":
+	setBrightness()
 	
 case "off":
 	turnOff()

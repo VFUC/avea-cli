@@ -12,35 +12,47 @@ class Avea {
 	var bluetoothManager = BluetoothManager()
 	var running = false
 	
-	func setColor(color: Color, peripheralUUIDS : [String]? = nil, newPeripheralHandler : (String -> Void)? = nil){
+	private func send(bytes: [UInt8], peripheralUUIDs : [String]? = nil, newPeripheralHandler : (String -> Void)? = nil){
 		running = true
 		let sem = dispatch_semaphore_create(0);
-		bluetoothManager.peripheralUUIDs = peripheralUUIDS
+		bluetoothManager.peripheralUUIDs = peripheralUUIDs
 		bluetoothManager.newUUIDHandler = { uuid in
 			newPeripheralHandler?(uuid)
 		}
 		
-		bluetoothManager.sendColorBytes(composeArrayWithColor(color), completionHandler: {
-			
+		bluetoothManager.sendBytes(bytes, completionHandler: {
 			dispatch_semaphore_signal(sem)
 		})
 		
 		dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER)
 	}
+	
+	
+	func setColor(color: Color, peripheralUUIDs : [String]? = nil, newPeripheralHandler : (String -> Void)? = nil){
+		send(getBytesForColor(color), peripheralUUIDs: peripheralUUIDs, newPeripheralHandler: newPeripheralHandler)
+	}
+	
+	func setBrightness(brightness: Int, peripheralUUIDs : [String]? = nil, newPeripheralHandler : (String -> Void)? = nil){
+		send(getBytesForBrightness(brightness), peripheralUUIDs: peripheralUUIDs, newPeripheralHandler: newPeripheralHandler)
+	}
 }
 
 
-extension Avea {
-		
+
+
+
+extension Avea { //Byte Juggling
 	
-	private func bufferFromColorValues(white white: Int, red: Int, green: Int, blue: Int) -> [UInt8]{
-		let j = 500
-		var color = [UInt8](count: 8, repeatedValue: 0)
-		color[0] = UInt8(white * 16)
-		color[1] = UInt8((white * 16) << 8 )
+	private func getBytesForBrightness(brightness: Int) -> [UInt8]{
+		var bytes = [UInt8]()
 		
-		return [0x35, UInt8(j & 0xFF), UInt8(j >> 8 & 0xFF), 10, 0]
+		let extended = UInt16(brightness * 16)
 		
+		bytes.append(0x57)
+		bytes.append(splitWord(extended).1)
+		bytes.append(splitWord(extended).0)
+		
+		return bytes
 	}
 	
 	private func splitWord(word: UInt16) -> (UInt8, UInt8) {
@@ -82,7 +94,7 @@ extension Avea {
 	}
 	
 	
-	private func composeArrayWithColor(color: Color) -> [UInt8] {
+	private func getBytesForColor(color: Color) -> [UInt8] {
 		var bytes = [UInt8]()
 		bytes.append(0x35)
 		bytes.append(0x32)

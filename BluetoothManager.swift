@@ -15,7 +15,7 @@ private struct Constants {
 }
 
 private enum Mode {
-	case WriteColor
+	case Write
 }
 
 
@@ -39,8 +39,8 @@ class BluetoothManager: NSObject {
 	var peripheralUUIDs : [String]? = nil
 	var newUUIDHandler : (String -> Void)?
 	
-	func sendColorBytes(bytes: [UInt8], completionHandler : (Void -> Void)? = nil){
-		mode = .WriteColor
+	func sendBytes(bytes: [UInt8], completionHandler : (Void -> Void)? = nil){
+		mode = .Write
 		bytesToSend = bytes
 		writeCompletionHandler = completionHandler
 		centralManager = CBCentralManager(delegate: self, queue: dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0))
@@ -135,7 +135,7 @@ extension BluetoothManager : CBPeripheralDelegate {
 			
 			switch mode {
 				
-			case .WriteColor:
+			case .Write:
 				if let bytes = bytesToSend {
 					print("[CBPeripheral] Sending data")
 					
@@ -160,7 +160,7 @@ extension BluetoothManager : CBPeripheralDelegate {
 		
 		switch mode {
 			
-		case .WriteColor:
+		case .Write:
 			self.writeCompletionHandler?()
 			
 		}
