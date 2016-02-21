@@ -68,12 +68,17 @@ $ avea show-colors
 
 Available colors: 
 
-[blue] Red: 0, Green: 0, Blue: 255, White: 30
-[green] Red: 0, Green: 255, Blue: 0, White: 30
-[red] Red: 255, Green: 0, Blue: 0, White: 30
-[yellow] Red: 235, Green: 0, Blue: 0, White: 200
+[blue] Red: 0, Green: 5, Blue: 255, White: 10
+[green] Red: 0, Green: 255, Blue: 0, White: 10
+[red] Red: 255, Green: 0, Blue: 0, White: 15
+[yellow] Red: 255, Green: 255, Blue: 0, White: 10
+[orange] Red: 255, Green: 75, Blue: 0, White: 0
+[purple] Red: 200, Green: 0, Blue: 250, White: 0
+[pink] Red: 220, Green: 0, Blue: 80, White: 10
 [white] Red: 0, Green: 0, Blue: 0, White: 255
-[warm-white] Red: 255, Green: 80, Blue: 0, White: 220
+[white-warm] Red: 200, Green: 100, Blue: 0, White: 175
+[white-cold] Red: 0, Green: 100, Blue: 200, White: 175
+[white-pinkish] Red: 100, Green: 0, Blue: 100, White: 200
 ```
 
 ##### Setting color
