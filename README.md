@@ -2,41 +2,56 @@
 
 A Swift Command Line Interface to interact with [Elgato Avea](https://www.elgato.com/en/smart/avea) light bulbs.
 
-The script currently starts up and looks for the first Bluetooth LE device containing the name "Avea". It then connects and sends the desired bytes to set the color.
-
-At the moment I only have a single "avea bulb", so I haven't worked on multi-device support yet and don't know if it works with the "sphere" and "flare" products as well.
+The script currently starts up and looks for the first Bluetooth LE device containing the name "Avea". It then connects and sends the desired bytes to set the color or brightness.
 
 The implementation wouldn't be possible without knowing the details of which bytes to send, so big ass hat tip to [Marmelatze](https://github.com/Marmelatze/avea_node) for figuring that out.
 
+<br>
 
 ## 🛠 Setup
 **Note: XCode is required to compile the executable**
 
 - Clone the repo
 
-`$ git clone https://github.com/vfuc/avea-cli`
+	`$ git clone https://github.com/vfuc/avea-cli`
 
 <br>
 
 - Run the `build.sh` script to compile the binary
 
-`$ avea-cli ./build.sh`
-
+	`$ avea-cli ./build.sh`
 
 <br>
-If you're feeling crazy you can 
+
+
+- Run the binary in the folder
+
+	`$ ./avea`
+
+<br>
+or if you're feeling fancy you can 
 - Copy it to `/usr/local/bin` to be able to run it everywhere : 
 
-`$ sudo cp avea /usr/local/bin/`
+	`$ sudo cp avea /usr/local/bin/`
+
+<br>
 
 ## 🎛 Usage
 
-##### Setting the color
+##### Set the color
 The color is set using **red**, **green**, **blue** and **white** values in the range of 0-255 with the `set-color-rgbw` command or its short form `rgbw`. 
  
 ```sh
 $ avea set-color-rgbw [red] [green] [blue] [white]
 $ avea rgbw [red] [green] [blue] [white]
+```
+
+##### Set the brightness
+Color and brightness are set independently of each other as they are two different commands sent to the bulb. Use values in the range of 0-255 with the command `set-brightness` or just `b`.
+
+```sh
+$ avea set-brightness [value]
+$ avea b [value]
 ```
 
 ##### Turn the bulb off
@@ -76,8 +91,16 @@ $ avea add-color [descriptor] [red] [green] [blue] [white]
 ```sh
 $ avea delete-color [descriptor]
 ```
+<br>
 
+## 🤔 Caveats
+At the moment I only have a single "avea bulb", so I haven't worked on multi-device support yet and don't know if it works with the "sphere" and "flare" products as well.
 
+Occasionally, the bulb is not discoverable and the script will look for it indefinitely. This seems to be an issue with the bulb itself though, as I experience it with the iOS client as well. 
+
+<br>
 
 ## 🙋 Contributing
 Issues and Pull Requests are welcome, of course :)
+
+I included some basic default colors, but please add to them if there's a cool one you found!
