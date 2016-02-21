@@ -17,8 +17,17 @@ struct ColorDescriptor {
 
 
 let defaultColors = [
-	ColorDescriptor(title: "blue", color: Color(red: 0, green: 30, blue: 255, white: 30)),
-	ColorDescriptor(title: "green", color: Color(red: 0, green: 255, blue: 0, white: 30))
+	ColorDescriptor(title: "blue", color: Color(red: 0, green: 5, blue: 255, white: 10)),
+	ColorDescriptor(title: "green", color: Color(red: 0, green: 255, blue: 0, white: 10)),
+	ColorDescriptor(title: "red", color: Color(red: 255, green: 0, blue: 0, white: 15)),
+	ColorDescriptor(title: "yellow", color: Color(red: 255, green: 255, blue: 0, white: 10)),
+	ColorDescriptor(title: "orange", color: Color(red: 255, green: 75, blue: 0, white: 0)),
+	ColorDescriptor(title: "purple", color: Color(red: 200, green: 0, blue: 250, white: 0)),
+	ColorDescriptor(title: "pink", color: Color(red: 220, green: 0, blue: 80, white: 10)),
+	ColorDescriptor(title: "white", color: Color(red: 0, green: 0, blue: 0, white: 255)),
+	ColorDescriptor(title: "white-warm", color: Color(red: 200, green: 100, blue: 0, white: 175)),
+	ColorDescriptor(title: "white-cold", color: Color(red: 0, green: 100, blue: 200, white: 175)),
+	ColorDescriptor(title: "white-pinkish", color: Color(red: 100, green: 0, blue: 100, white: 200))
 ]
 
 /* FUNCTIONS */
