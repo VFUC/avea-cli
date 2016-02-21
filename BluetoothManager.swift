@@ -14,6 +14,12 @@ private struct Constants {
 	static let ColorCharacteristicUUID = "F815E811-456C-6761-746F-4D756E696368"
 }
 
+private enum Mode {
+	case WriteColor
+}
+
+
+
 
 class BluetoothManager: NSObject {
 	
@@ -27,14 +33,16 @@ class BluetoothManager: NSObject {
 		}
 	}
 	
+	private var mode: Mode?
 	private var bytesToSend : [UInt8]?
-	private var completionHandler : (Void -> Void)?
+	private var writeCompletionHandler : (Void -> Void)?
 	var peripheralUUIDs : [String]? = nil
 	var newUUIDHandler : (String -> Void)?
 	
-	func sendBytes(bytes: [UInt8], completionHandler : (Void -> Void)? = nil){
+	func sendColorBytes(bytes: [UInt8], completionHandler : (Void -> Void)? = nil){
+		mode = .WriteColor
 		bytesToSend = bytes
-		self.completionHandler = completionHandler
+		writeCompletionHandler = completionHandler
 		centralManager = CBCentralManager(delegate: self, queue: dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0))
 	}
 }
@@ -117,22 +125,50 @@ extension BluetoothManager : CBPeripheralDelegate {
 			return
 		}
 		
+		guard let mode = mode else {
+			print("[Error] Mode not set")
+			return
+		}
+		
 		for char in characteristics where char.UUID.UUIDString == Constants.ColorCharacteristicUUID {
 			
-			if let bytes = bytesToSend {
-				print("[CBPeripheral] Sending data")
 			
-				let data = NSData(bytes: bytes, length: bytes.count)
-			
-				peripheral.writeValue(data, forCharacteristic: char, type: .WithResponse)
-			
+			switch mode {
+				
+			case .WriteColor:
+				if let bytes = bytesToSend {
+					print("[CBPeripheral] Sending data")
+					
+					let data = NSData(bytes: bytes, length: bytes.count)
+					
+					peripheral.writeValue(data, forCharacteristic: char, type: .WithResponse)
+				}
+				
 			}
+			
 		}
 	}
 	
 	func peripheral(peripheral: CBPeripheral, didWriteValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
 		print("[CBPeripheral] Data sent")
-		self.completionHandler?()
+		
+		
+		guard let mode = mode else {
+			print("[Error] Mode not set")
+			return
+		}
+		
+		switch mode {
+			
+		case .WriteColor:
+			self.writeCompletionHandler?()
+			
+		}
+		
+	}
+	
+	func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+		print("[CBPeripheral] Received data")
 	}
 }
 

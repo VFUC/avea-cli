@@ -12,27 +12,27 @@ class Avea {
 	var bluetoothManager = BluetoothManager()
 	var running = false
 	
-	func setColor(red red: Int, green: Int, blue: Int, white: Int, peripheralUUIDS : [String]? = nil, newPeripheralHandler : (String -> Void)? = nil){
+	func setColor(color: Color, peripheralUUIDS : [String]? = nil, newPeripheralHandler : (String -> Void)? = nil){
 		running = true
 		let sem = dispatch_semaphore_create(0);
-		
 		bluetoothManager.peripheralUUIDs = peripheralUUIDS
 		bluetoothManager.newUUIDHandler = { uuid in
 			newPeripheralHandler?(uuid)
 		}
 		
-		bluetoothManager.sendBytes(composeArrayWithColors(white: white, red: red, green: green, blue: blue), completionHandler: {
+		bluetoothManager.sendColorBytes(composeArrayWithColor(color), completionHandler: {
 			
 			dispatch_semaphore_signal(sem)
 		})
-
-		dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER)
 		
+		dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER)
 	}
 }
 
 
 extension Avea {
+		
+	
 	private func bufferFromColorValues(white white: Int, red: Int, green: Int, blue: Int) -> [UInt8]{
 		let j = 500
 		var color = [UInt8](count: 8, repeatedValue: 0)
@@ -82,21 +82,21 @@ extension Avea {
 	}
 	
 	
-	private func composeArrayWithColors(white white: Int, red: Int, green: Int, blue: Int) -> [UInt8] {
+	private func composeArrayWithColor(color: Color) -> [UInt8] {
 		var bytes = [UInt8]()
 		bytes.append(0x35)
 		bytes.append(0x32)
 		bytes.append(0)
 		bytes.append(0x0a)
 		bytes.append(0)
-		bytes.append(splitWord(encodeWhite(white)).0)
-		bytes.append(splitWord(encodeWhite(white)).1)
-		bytes.append(splitWord(encodeRed(red)).0)
-		bytes.append(splitWord(encodeRed(red)).1)
-		bytes.append(splitWord(encodeGreen(green)).0)
-		bytes.append(splitWord(encodeGreen(green)).1)
-		bytes.append(splitWord(encodeBlue(blue)).0)
-		bytes.append(splitWord(encodeBlue(blue)).1)
+		bytes.append(splitWord(encodeWhite(color.white)).0)
+		bytes.append(splitWord(encodeWhite(color.white)).1)
+		bytes.append(splitWord(encodeRed(color.red)).0)
+		bytes.append(splitWord(encodeRed(color.red)).1)
+		bytes.append(splitWord(encodeGreen(color.green)).0)
+		bytes.append(splitWord(encodeGreen(color.green)).1)
+		bytes.append(splitWord(encodeBlue(color.blue)).0)
+		bytes.append(splitWord(encodeBlue(color.blue)).1)
 		
 		return bytes
 	}

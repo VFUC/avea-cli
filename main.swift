@@ -10,38 +10,36 @@ private struct Constants {
 	static let PeripheralUUIDFile = "avea-uuids.txt"
 }
 
-struct Color {
+struct ColorDescriptor {
 	let title: String
-	let red: Int
-	let green: Int
-	let blue: Int
-	let white: Int
+	let color: Color
 }
 
+
 let defaultColors = [
-	Color(title: "blue", red: 0, green: 30, blue: 255, white: 30),
-	Color(title: "green", red: 0, green: 255, blue: 0, white: 30)
+	ColorDescriptor(title: "blue", color: Color(red: 0, green: 30, blue: 255, white: 30)),
+	ColorDescriptor(title: "green", color: Color(red: 0, green: 255, blue: 0, white: 30))
 ]
 
 /* FUNCTIONS */
 
-func getColorsFromFile() -> [Color]? {
+func getColorDescriptorsFromFile() -> [ColorDescriptor]? {
 	let directoryPath = NSString(string: Constants.AveaDirectoryPath).stringByExpandingTildeInPath
 	let filePath = directoryPath.stringByAppendingString("/\(Constants.ColorDescriptorFile)")
-
+	
 	guard let data = NSData(contentsOfFile: filePath) else {
 		print("[Error] Can't read colors from file! Make sure \"\(Constants.ColorDescriptorFile)\" exists and is valid JSON.")
 		return nil
 	}
 	
 	do {
-		let json = try NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers)		
+		let json = try NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers)
 		guard let results = json["colors"] as? NSArray else {
 			print("[Error] Can't get array for dictionary key \'colors\' from JSON")
 			return nil
 		}
-
-		var colors = [Color]()
+		
+		var colorDescriptors = [ColorDescriptor]()
 		
 		for result in results {
 			guard let dict = result as? NSDictionary else {
@@ -52,42 +50,42 @@ func getColorsFromFile() -> [Color]? {
 			guard let title = dict["title"] as? String else {
 				print("[Error] Error retrieving color title from JSON file")
 				return nil
-			}	
+			}
 			
 			guard let red = dict["red"] as? Int,
 				let green = dict["green"] as? Int,
 				let blue = dict["blue"] as? Int,
 				let white = dict["white"] as? Int else {
-				print("[Error] Can't parse color values for color with title \'\(title)\'")
-				return nil
-			}			
-
-			colors.append(Color(title: title, red: red, green: green, blue: blue, white: white))
+					print("[Error] Can't parse color values for color with title \'\(title)\'")
+					return nil
+			}
+			
+			colorDescriptors.append(ColorDescriptor(title: title, color: Color(red: red, green: green, blue: blue, white: white)))
 		}
 		
-		return colors	
-
+		return colorDescriptors
+		
 	} catch let error {
 		print(error)
 		return nil
 	}
 }
 
-func getJSONDataForColors(colors: [Color]) -> NSData? {
+func getJSONDataForColorDescriptors(colorDescriptors: [ColorDescriptor]) -> NSData? {
 	var colorDicts = [[String : AnyObject]]()
 	
-	for color in colors {
+	for colorDescriptor in colorDescriptors {
 		var colorDict = [String : AnyObject]()
-		colorDict["title"] = color.title
-		colorDict["red"] = color.red
-		colorDict["green"] = color.green
-		colorDict["blue"] = color.blue
-		colorDict["white"] = color.white
+		colorDict["title"] = colorDescriptor.title
+		colorDict["red"] = colorDescriptor.color.red
+		colorDict["green"] = colorDescriptor.color.green
+		colorDict["blue"] = colorDescriptor.color.blue
+		colorDict["white"] = colorDescriptor.color.white
 		colorDicts.append(colorDict)
 	}
-
+	
 	let colorsJSON = [ "colors" : colorDicts ]
-
+	
 	var data: NSData
 	do {
 		data = try NSJSONSerialization.dataWithJSONObject(colorsJSON, options: NSJSONWritingOptions())
@@ -95,7 +93,7 @@ func getJSONDataForColors(colors: [Color]) -> NSData? {
 		print("Error converting Colors to JSON - \(error)")
 		return nil
 	}
-
+	
 	return data
 }
 
@@ -103,9 +101,9 @@ func getJSONDataForColors(colors: [Color]) -> NSData? {
 func setupAveaDirectory() -> Bool {
 	let fileManager = NSFileManager.defaultManager()
 	let directoryPath = NSString(string: Constants.AveaDirectoryPath).stringByExpandingTildeInPath
-
+	
 	var isDirectory : ObjCBool = false
-
+	
 	if fileManager.fileExistsAtPath(directoryPath, isDirectory: &isDirectory) {
 		if isDirectory {
 			return true
@@ -130,11 +128,11 @@ func setUpColorFile() -> Bool {
 	let fileManager = NSFileManager.defaultManager()
 	let directoryPath = NSString(string: Constants.AveaDirectoryPath).stringByExpandingTildeInPath
 	let colorFilePath = directoryPath.stringByAppendingString("/\(Constants.ColorDescriptorFile)")
-
+	
 	if fileManager.fileExistsAtPath(colorFilePath) {
-		return !(getColorsFromFile() == nil)
+		return !(getColorDescriptorsFromFile() == nil)
 	} else { // file doesn't exist, create file
-		if fileManager.createFileAtPath(colorFilePath, contents: getJSONDataForColors(defaultColors)!, attributes: nil) {
+		if fileManager.createFileAtPath(colorFilePath, contents: getJSONDataForColorDescriptors(defaultColors)!, attributes: nil) {
 			print("[main] Created color file \'\(colorFilePath)\'")
 			return true
 		} else {
@@ -149,7 +147,7 @@ func setUpPeripheralUUIDFile() -> Bool {
 	let fileManager = NSFileManager.defaultManager()
 	let directoryPath = NSString(string: Constants.AveaDirectoryPath).stringByExpandingTildeInPath
 	let idFilePath = directoryPath.stringByAppendingString("/\(Constants.PeripheralUUIDFile)")
-
+	
 	if fileManager.fileExistsAtPath(idFilePath) {
 		return true
 	} else { // file doesn't exist, create file
@@ -195,27 +193,27 @@ func getUUIDSFromFile() -> [String]? {
 func writeUUIDsToFile(uuids: [String]) {
 	let directoryPath = NSString(string: Constants.AveaDirectoryPath).stringByExpandingTildeInPath
 	let idFilePath = directoryPath.stringByAppendingString("/\(Constants.PeripheralUUIDFile)")
-
+	
 	guard let fileHandle = NSFileHandle(forUpdatingAtPath: idFilePath) else {
 		print("[Error] Can't write to peripheral uuid file, exiting")
 		exit(1)
 	}
-
+	
 	var writeString = ""
 	for (index,uuid) in uuids.enumerate() {
 		if index != 0 {
 			writeString.appendContentsOf("\n")
 		}
-
+		
 		writeString.appendContentsOf(uuid)
 	}
-
+	
 	guard let data = writeString.dataUsingEncoding(NSUTF8StringEncoding) else {
 		print("[ERROR] Can't get data from peripheral id string, exiting!")
 		exit(1)
 	}
-
-	fileHandle.truncateFileAtOffset(0) //Delete current file contents 
+	
+	fileHandle.truncateFileAtOffset(0) //Delete current file contents
 	fileHandle.writeData(data)
 }
 
@@ -241,7 +239,7 @@ func setColorUsingRGBW(){
 		print("[Error] Wrong number of arguments! Needs [red] [green] [blue] [white]")
 		exit(1)
 	}
-
+	
 	guard let red = Int(Process.arguments[2]) where (0...255).contains(red) else {
 		print("[Error] Red value (\(Process.arguments[2])) is not an Int or out of range (0-255)")
 		exit(1)
@@ -263,7 +261,7 @@ func setColorUsingRGBW(){
 	}
 	
 	print("[setColor] Red: \(red), Green: \(green), Blue: \(blue), White: \(white)")
-	Avea().setColor(red: red, green: green, blue: blue, white: white, peripheralUUIDS: getUUIDSFromFile(), newPeripheralHandler: addNewPeripheralUUIDToFile)
+	Avea().setColor(Color(red: red, green: green, blue: blue, white: white), peripheralUUIDS: getUUIDSFromFile(), newPeripheralHandler: addNewPeripheralUUIDToFile)
 }
 
 // "c", "set-color"
@@ -274,37 +272,37 @@ func setColorUsingDescriptor(){
 	}
 	
 	let input = Process.arguments[2]
-
-	guard let colors = getColorsFromFile() else {
+	
+	guard let colorDescriptors = getColorDescriptorsFromFile() else {
 		print("Colors not loaded, exiting")
 		exit(1)
 	}
-
-	for color in colors where color.title == input {
-		print("[setColor] \(input) - Red: \(color.red), Green: \(color.green), Blue: \(color.blue), White: \(color.white)")		
-		Avea().setColor(red: color.red, green: color.green, blue: color.blue, white: color.white, peripheralUUIDS: getUUIDSFromFile(), newPeripheralHandler: addNewPeripheralUUIDToFile)
+	
+	for colorDescriptor in colorDescriptors where colorDescriptor.title == input {
+		print("[setColor] \(input) - Red: \(colorDescriptor.color.red), Green: \(colorDescriptor.color.green), Blue: \(colorDescriptor.color.blue), White: \(colorDescriptor.color.white)")
+		Avea().setColor(colorDescriptor.color, peripheralUUIDS: getUUIDSFromFile(), newPeripheralHandler: addNewPeripheralUUIDToFile)
 		return
 	}
-
-	print("[Error] Color Descriptor not recognized! Show available colors using \'avea show-colors\'") 
+	
+	print("[Error] Color Descriptor not recognized! Show available colors using \'avea show-colors\'")
 }
 
 // "off"
 func turnOff(){
 	print("[main] Turning off Avea")
-	Avea().setColor(red: 0, green: 0, blue: 0, white: 0, peripheralUUIDS: getUUIDSFromFile(), newPeripheralHandler: addNewPeripheralUUIDToFile)
+	Avea().setColor(Color(red: 0, green: 0, blue: 0, white: 0), peripheralUUIDS: getUUIDSFromFile(), newPeripheralHandler: addNewPeripheralUUIDToFile)
 }
 
 // "show-colors"
 func showColorDescriptors(){
-	guard let colors = getColorsFromFile() else {
+	guard let colorDescriptors = getColorDescriptorsFromFile() else {
 		print("Colors not loaded, exiting")
 		exit(1)
 	}
-
+	
 	print("Available colors: \n")
-	for color in colors {
-		print("[\(color.title)] Red: \(color.red), Green: \(color.green), Blue: \(color.blue), White: \(color.white)")
+	for colorDescriptor in colorDescriptors {
+		print("[\(colorDescriptor.title)] Red: \(colorDescriptor.color.red), Green: \(colorDescriptor.color.green), Blue: \(colorDescriptor.color.blue), White: \(colorDescriptor.color.white)")
 	}
 }
 
@@ -314,8 +312,8 @@ func addColor(){
 		print("[Error] Wrong number of arguments! See help for usage details")
 		exit(1)
 	}
-
-	let title = Process.arguments[2]	
+	
+	let title = Process.arguments[2]
 	
 	guard let red = Int(Process.arguments[3]) where (0...255).contains(red) else {
 		print("[Error] Red value (\(Process.arguments[3])) is not an Int or out of range (0-255)")
@@ -337,25 +335,25 @@ func addColor(){
 		exit(1)
 	}
 	
-	let addedColor = Color(title: title, red: red, green: green, blue: blue, white: white)
+	let addedColorDescriptor = ColorDescriptor(title: title, color: Color(red: red, green: green, blue: blue, white: white))
 	
-	guard let colors = getColorsFromFile() else {
+	guard let colorDescriptors = getColorDescriptorsFromFile() else {
 		print("[Error] Can't get colors from file, exiting")
 		exit(1)
 	}
-
-	for color in colors where color.title == addedColor.title {
-		print("[Error] Color with name \'\(addedColor.title)\' exists already, use \'avea delete-color \(addedColor.title)\' to remove it first")
+	
+	for colorDescriptor in colorDescriptors where colorDescriptor.title == addedColorDescriptor.title {
+		print("[Error] Color with name \'\(addedColorDescriptor.title)\' exists already, use \'avea delete-color \(addedColorDescriptor.title)\' to remove it first")
 		exit(1)
 	}
 	
-	var newColors = colors //mutable copy
-	newColors.append(addedColor)
-
-	guard let jsonData = getJSONDataForColors(newColors) else {
+	var newColorDescriptors = colorDescriptors //mutable copy
+	newColorDescriptors.append(addedColorDescriptor)
+	
+	guard let jsonData = getJSONDataForColorDescriptors(newColorDescriptors) else {
 		exit(1)
 	}
-
+	
 	let directoryPath = NSString(string: Constants.AveaDirectoryPath).stringByExpandingTildeInPath
 	let colorFilePath = directoryPath.stringByAppendingString("/\(Constants.ColorDescriptorFile)")
 	
@@ -363,10 +361,10 @@ func addColor(){
 		print("[Error] Can't write to color JSON file, exiting")
 		exit(1)
 	}
-
-	fileHandle.truncateFileAtOffset(0) //Delete current file contents 
+	
+	fileHandle.truncateFileAtOffset(0) //Delete current file contents
 	fileHandle.writeData(jsonData)
-	print("[main] \'\(addedColor.title)\' added to colors")
+	print("[main] \'\(addedColorDescriptor.title)\' added to colors")
 }
 
 // "delete-color"
@@ -375,39 +373,39 @@ func deleteColor(){
 		print("[Error] Wrong number of arguments! See help for usage details")
 		exit(1)
 	}
-
+	
 	let title = Process.arguments[2]
-
-	guard let colors = getColorsFromFile() else {
+	
+	guard let colorDescriptors = getColorDescriptorsFromFile() else {
 		print("[Error] Can't get colors from file, exiting")
 		exit(1)
 	}
-
-	var newColors = colors //mutable copy
-
-	for (index, color) in colors.enumerate() where color.title == title {
-		newColors.removeAtIndex(index)
+	
+	var newColorDescriptors = colorDescriptors //mutable copy
+	
+	for (index, colorDescriptor) in colorDescriptors.enumerate() where colorDescriptor.title == title {
+		newColorDescriptors.removeAtIndex(index)
 	}
-
-	guard newColors.count < colors.count else { //no color removed
+	
+	guard newColorDescriptors.count < colorDescriptors.count else { //no color removed
 		print("[Error] No color found with name \'\(title)\', check saved colors using \'avea show-colors\'")
 		exit(1)
 	}
-
-	guard let jsonData = getJSONDataForColors(newColors) else {
+	
+	guard let jsonData = getJSONDataForColorDescriptors(newColorDescriptors) else {
 		exit(1)
 	}
 	
-
+	
 	let directoryPath = NSString(string: Constants.AveaDirectoryPath).stringByExpandingTildeInPath
 	let colorFilePath = directoryPath.stringByAppendingString("/\(Constants.ColorDescriptorFile)")
-
+	
 	guard let fileHandle = NSFileHandle(forUpdatingAtPath: colorFilePath) else {
 		print("[Error] Can't write to color JSON file, exiting")
 		exit(1)
 	}
-
-	fileHandle.truncateFileAtOffset(0) //Delete current file contents 
+	
+	fileHandle.truncateFileAtOffset(0) //Delete current file contents
 	fileHandle.writeData(jsonData)
 	print("[main] \'\(title)\' removed from colors")
 }
@@ -415,32 +413,32 @@ func deleteColor(){
 // "help"
 func printHelp() {
 	print("Avea-CLI\n")
-
+	
 	print("Usage options:\n")
-
+	
 	print(" avea rgbw [red] [green] [blue] [white]")
 	print(" avea set-color-rgbw [red] [green] [blue] [white]")
-	print("\t\tSet color according to red, green, blue and white value in range of 0-255\n")	
-
+	print("\t\tSet color according to red, green, blue and white value in range of 0-255\n")
+	
 	print(" avea off")
 	print("\t\t Turn avea off\n")
 	
 	print(" avea c [descriptor]")
 	print(" avea set-color [descriptor]")
 	print("\t\tSet color using color descriptor\n")
-
+	
 	print(" avea show-colors")
 	print("\t\t Show all color descriptors\n")
-
+	
 	print(" avea add-color [name] [red] [green] [blue] [white]")
 	print("\t\t Add color descriptor with associated RGBW values\n")
-
+	
 	print(" avea delete-color [name]")
 	print("\t\t Delete a color descriptor\n")
-
+	
 	print(" avea help")
 	print("\t\t Show this help\n")
-
+	
 	print("\n\ngithub.com/vfuc/avea-cli")
 	print("vfuc.co")
 }
@@ -451,6 +449,7 @@ func printHelp() {
 
 
 /* MAIN */
+
 
 guard setupAveaDirectory() else {
 	print("[Error] Avea directory not setup correctly, exiting.")
@@ -471,29 +470,29 @@ guard Process.arguments.count > 1 else {
 
 
 switch Process.arguments[1] {
-
-	case "rgbw", "set-color-rgbw":
-		setColorUsingRGBW()
 	
-	case "c", "set-color":
-		setColorUsingDescriptor()
-
-	case "off":
-		turnOff()
+case "rgbw", "set-color-rgbw":
+	setColorUsingRGBW()
 	
-	case "show-colors":
-		showColorDescriptors()
+case "c", "set-color":
+	setColorUsingDescriptor()
 	
-	case "add-color":
-		addColor()
-
-	case "delete-color":
-		deleteColor()
-		
-	case "help":
-		printHelp()
+case "off":
+	turnOff()
 	
-	default:
-		print("Argument not recognized! Use avea help for more information")
+case "show-colors":
+	showColorDescriptors()
+	
+case "add-color":
+	addColor()
+	
+case "delete-color":
+	deleteColor()
+	
+case "help":
+	printHelp()
+	
+default:
+	print("Argument not recognized! Use avea help for more information")
 }
 
