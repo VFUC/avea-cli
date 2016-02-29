@@ -27,7 +27,7 @@ let defaultColors = [
 	ColorDescriptor(title: "white", color: Color(red: 0, green: 0, blue: 0, white: 255)),
 	ColorDescriptor(title: "white-warm", color: Color(red: 200, green: 100, blue: 0, white: 175)),
 	ColorDescriptor(title: "white-cold", color: Color(red: 0, green: 100, blue: 200, white: 175)),
-	ColorDescriptor(title: "white-pinkish", color: Color(red: 100, green: 0, blue: 100, white: 200))
+	ColorDescriptor(title: "white-rose", color: Color(red: 100, green: 0, blue: 100, white: 200))
 ]
 
 /* FUNCTIONS */
