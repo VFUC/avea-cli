@@ -2,24 +2,28 @@
 
 A Swift Command Line Interface to interact with [Elgato Avea](https://www.elgato.com/en/smart/avea) light bulbs.
 
-The script currently starts up and looks for the first Bluetooth LE device containing the name "Avea". It then connects and sends the desired bytes to set the color or brightness.
+The script currently starts up and looks for the first Bluetooth LE device containing the name "Avea". It then connects and sends the desired bytes to modify the bulb's color or brightness.
 
-The implementation wouldn't be possible without knowing the details of which bytes to send, so big ass hat tip to [Marmelatze](https://github.com/Marmelatze/avea_node) for figuring that out.
+The implementation wouldn't be possible without knowing the details of which bytes to send, so kudos to [Marmelatze](https://github.com/Marmelatze/avea_node) for figuring that out.
+
+**Requirements**: macOS 10.0, Swift 3
 
 <br>
 
 ## 🛠 Setup
-**Note: XCode is required to compile the executable**
+**Note: Xcode is required to compile the executable**
 
 - Clone the repo
 
 	`$ git clone https://github.com/vfuc/avea-cli`
+	<br>
+	`$ cd avea-cli`
 
 <br>
 
 - Run the `build.sh` script to compile the binary
 
-	`$ avea-cli ./build.sh`
+	`$ ./build.sh`
 
 <br>
 
@@ -30,9 +34,9 @@ The implementation wouldn't be possible without knowing the details of which byt
 
 <br>
 or if you're feeling fancy you can 
-- Copy it to `/usr/local/bin` to be able to run it everywhere : 
+- Link the binary to `/usr/local/bin` to be able to run it everywhere (replace the link with the path to the compiled binary): 
 
-	`$ sudo cp avea /usr/local/bin/`
+	`$ sudo cp [link/to/compiled/avea] /usr/local/bin/`
 
 <br>
 
@@ -61,7 +65,7 @@ $ avea off
 
 ### Color descriptors
 Because I'm too lazy to type out raw values I added color descriptors, they're pretty self-explanatory.
-The data is stored as JSON in the `avea-colors.json` file
+The data is stored as JSON in the `~/.avea/avea-colors.json` file
 ##### Show available colors
 ```sh
 $ avea show-colors
