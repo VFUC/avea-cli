@@ -1,1 +1,1 @@
-xcrun -sdk macosx swiftc -v Avea.swift BluetoothManager.swift Color.swift main.swift -o avea
+swiftc -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -target x86_64-apple-macosx10.10 -v Avea.swift BluetoothManager.swift Color.swift main.swift -o avea

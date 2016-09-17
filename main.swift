@@ -5,9 +5,9 @@ import Foundation
 
 
 private struct Constants {
-	static let AveaDirectoryPath = "~/.avea"
-	static let ColorDescriptorFile = "avea-colors.json"
-	static let PeripheralUUIDFile = "avea-uuids.txt"
+	static let aveaDirectoryPath = "~/.avea"
+	static let colorDescriptorFile = "avea-colors.json"
+	static let peripheralUUIDFile = "avea-uuids.txt"
 }
 
 struct ColorDescriptor {
@@ -33,16 +33,21 @@ let defaultColors = [
 /* FUNCTIONS */
 
 func getColorDescriptorsFromFile() -> [ColorDescriptor]? {
-	let directoryPath = NSString(string: Constants.AveaDirectoryPath).stringByExpandingTildeInPath
-	let filePath = directoryPath.stringByAppendingString("/\(Constants.ColorDescriptorFile)")
+	let directoryPath = NSString(string: Constants.aveaDirectoryPath).expandingTildeInPath
+	let filePath = directoryPath.appending("/\(Constants.colorDescriptorFile)")
 	
-	guard let data = NSData(contentsOfFile: filePath) else {
-		print("[Error] Can't read colors from file! Make sure \"\(Constants.ColorDescriptorFile)\" exists and is valid JSON.")
-		return nil
-	}
+
+	let fileURL = URL(fileURLWithPath: filePath) 
 	
 	do {
-		let json = try NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers)
+		let data = try Data(contentsOf: fileURL)
+
+		let jsonObject = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
+		guard let json = jsonObject as? [String : Any] else {
+			print("[Error] Can't get json dictionary from JSON object!")
+			return nil
+		}
+
 		guard let results = json["colors"] as? NSArray else {
 			print("[Error] Can't get array for dictionary key \'colors\' from JSON")
 			return nil
@@ -51,7 +56,7 @@ func getColorDescriptorsFromFile() -> [ColorDescriptor]? {
 		var colorDescriptors = [ColorDescriptor]()
 		
 		for result in results {
-			guard let dict = result as? NSDictionary else {
+			guard let dict = result as? [String : Any] else {
 				print("[Error] Can't get color dictionary from JSON file")
 				return nil
 			}
@@ -80,11 +85,11 @@ func getColorDescriptorsFromFile() -> [ColorDescriptor]? {
 	}
 }
 
-func getJSONDataForColorDescriptors(colorDescriptors: [ColorDescriptor]) -> NSData? {
-	var colorDicts = [[String : AnyObject]]()
+func getJSONData(forColorDescriptors colorDescriptors: [ColorDescriptor]) -> Data? {
+	var colorDicts = [[String : Any]]()
 	
 	for colorDescriptor in colorDescriptors {
-		var colorDict = [String : AnyObject]()
+		var colorDict = [String : Any]()
 		colorDict["title"] = colorDescriptor.title
 		colorDict["red"] = colorDescriptor.color.red
 		colorDict["green"] = colorDescriptor.color.green
@@ -95,9 +100,9 @@ func getJSONDataForColorDescriptors(colorDescriptors: [ColorDescriptor]) -> NSDa
 	
 	let colorsJSON = [ "colors" : colorDicts ]
 	
-	var data: NSData
+	var data: Data
 	do {
-		data = try NSJSONSerialization.dataWithJSONObject(colorsJSON, options: NSJSONWritingOptions())
+		data = try JSONSerialization.data(withJSONObject: colorsJSON, options: JSONSerialization.WritingOptions())
 	} catch let error {
 		print("Error converting Colors to JSON - \(error)")
 		return nil
@@ -108,13 +113,13 @@ func getJSONDataForColorDescriptors(colorDescriptors: [ColorDescriptor]) -> NSDa
 
 // Returns true if directory is setup and valid
 func setupAveaDirectory() -> Bool {
-	let fileManager = NSFileManager.defaultManager()
-	let directoryPath = NSString(string: Constants.AveaDirectoryPath).stringByExpandingTildeInPath
+	let fileManager = FileManager.default
+	let directoryPath = NSString(string: Constants.aveaDirectoryPath).expandingTildeInPath
 	
 	var isDirectory : ObjCBool = false
 	
-	if fileManager.fileExistsAtPath(directoryPath, isDirectory: &isDirectory) {
-		if isDirectory {
+	if fileManager.fileExists(atPath: directoryPath, isDirectory: &isDirectory) {
+		if isDirectory.boolValue {
 			return true
 		} else {
 			print("[Error] File exists at specified Avea directory location \'\(directoryPath)\'\nRemove file or change directory path in script.")
@@ -122,7 +127,7 @@ func setupAveaDirectory() -> Bool {
 		}
 	}	else { // Nothing at path, create directory
 		do {
-			try fileManager.createDirectoryAtPath(directoryPath, withIntermediateDirectories: true, attributes: nil)
+			try fileManager.createDirectory(atPath: directoryPath, withIntermediateDirectories: true, attributes: nil)
 			print("[main] Created Avea directory at path \'\(directoryPath)\'")
 			return true
 		} catch let error {
@@ -134,14 +139,14 @@ func setupAveaDirectory() -> Bool {
 
 // Returns true if color file exists and JSON parseable / has been created
 func setUpColorFile() -> Bool {
-	let fileManager = NSFileManager.defaultManager()
-	let directoryPath = NSString(string: Constants.AveaDirectoryPath).stringByExpandingTildeInPath
-	let colorFilePath = directoryPath.stringByAppendingString("/\(Constants.ColorDescriptorFile)")
+	let fileManager = FileManager.default
+	let directoryPath = NSString(string: Constants.aveaDirectoryPath).expandingTildeInPath
+	let colorFilePath = directoryPath.appending("/\(Constants.colorDescriptorFile)")
 	
-	if fileManager.fileExistsAtPath(colorFilePath) {
+	if fileManager.fileExists(atPath: colorFilePath) {
 		return !(getColorDescriptorsFromFile() == nil)
 	} else { // file doesn't exist, create file
-		if fileManager.createFileAtPath(colorFilePath, contents: getJSONDataForColorDescriptors(defaultColors)!, attributes: nil) {
+		if fileManager.createFile(atPath: colorFilePath, contents: getJSONData(forColorDescriptors: defaultColors)!, attributes: nil) {
 			print("[main] Created color file \'\(colorFilePath)\'")
 			return true
 		} else {
@@ -153,14 +158,14 @@ func setUpColorFile() -> Bool {
 
 // Returns true if periheral id file exists/has been created
 func setUpPeripheralUUIDFile() -> Bool {
-	let fileManager = NSFileManager.defaultManager()
-	let directoryPath = NSString(string: Constants.AveaDirectoryPath).stringByExpandingTildeInPath
-	let idFilePath = directoryPath.stringByAppendingString("/\(Constants.PeripheralUUIDFile)")
+	let fileManager = FileManager.default
+	let directoryPath = NSString(string: Constants.aveaDirectoryPath).expandingTildeInPath
+	let idFilePath = directoryPath.appending("/\(Constants.peripheralUUIDFile)")
 	
-	if fileManager.fileExistsAtPath(idFilePath) {
+	if fileManager.fileExists(atPath: idFilePath) {
 		return true
 	} else { // file doesn't exist, create file
-		if fileManager.createFileAtPath(idFilePath, contents: nil, attributes: nil) {
+		if fileManager.createFile(atPath: idFilePath, contents: nil, attributes: nil) {
 			print("[main] Created peripheral ID file \'\(idFilePath)\'")
 			return true
 		} else {
@@ -177,64 +182,72 @@ func setupAveaFiles() -> Bool {
 
 
 func getUUIDSFromFile() -> [String]? {
-	let directoryPath = NSString(string: Constants.AveaDirectoryPath).stringByExpandingTildeInPath
-	let idFilePath = directoryPath.stringByAppendingString("/\(Constants.PeripheralUUIDFile)")
-	
-	guard let data = NSData(contentsOfFile: idFilePath) else {
-		print("[Error] Can't read peripheral ids from id file! Make sure \"\(idFilePath)\" exists")
-		return nil
+	let directoryPath = NSString(string: Constants.aveaDirectoryPath).expandingTildeInPath
+	let idFilePath = directoryPath.appending("/\(Constants.peripheralUUIDFile)")
+
+	let idFileURL = URL(fileURLWithPath: idFilePath)
+	//  else {
+	// 	print("[Error] Can't read id file. Make sure \"\(idFilePath)\" exists.")
+	// 	return nil
+	// }
+
+	do {
+		let data = try Data(contentsOf: idFileURL)
+		guard let dataString = String(data: data, encoding: String.Encoding.utf8) else {
+			print("[Error] Can't parse periherpal id file data to String!")
+			return nil
+		}
+		let components = dataString.components(separatedBy: NSCharacterSet.newlines)
+		var uuids = [String]()
+		
+		for component in components where component.characters.count > 0 {
+			uuids.append(component)
+		}
+		
+		return uuids
+
+	} catch let error{
+			print(error)
+			return nil
 	}
-	
-	guard let dataString = String(data: data, encoding: NSUTF8StringEncoding) else {
-		print("[Error] Can't parse periherpal id file data to String!")
-		return nil
-	}
-	let components = dataString.componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
-	var uuids = [String]()
-	
-	for component in components where component.characters.count > 0 {
-		uuids.append(component)
-	}
-	
-	return uuids
 }
 
 func writeUUIDsToFile(uuids: [String]) {
-	let directoryPath = NSString(string: Constants.AveaDirectoryPath).stringByExpandingTildeInPath
-	let idFilePath = directoryPath.stringByAppendingString("/\(Constants.PeripheralUUIDFile)")
+	let directoryPath = NSString(string: Constants.aveaDirectoryPath).expandingTildeInPath
+	let idFilePath = directoryPath.appending("/\(Constants.peripheralUUIDFile)")
 	
-	guard let fileHandle = NSFileHandle(forUpdatingAtPath: idFilePath) else {
+	guard let fileHandle = FileHandle(forUpdatingAtPath: idFilePath) else {
 		print("[Error] Can't write to peripheral uuid file, exiting")
 		exit(1)
 	}
 	
 	var writeString = ""
-	for (index,uuid) in uuids.enumerate() {
+	for (index,uuid) in uuids.enumerated() {
 		if index != 0 {
-			writeString.appendContentsOf("\n")
+			writeString.append("\n")
 		}
 		
-		writeString.appendContentsOf(uuid)
+		writeString.append(uuid)
 	}
 	
-	guard let data = writeString.dataUsingEncoding(NSUTF8StringEncoding) else {
+	guard let data = writeString.data(using: String.Encoding.utf8) else {
 		print("[ERROR] Can't get data from peripheral id string, exiting!")
 		exit(1)
 	}
 	
-	fileHandle.truncateFileAtOffset(0) //Delete current file contents
-	fileHandle.writeData(data)
+	fileHandle.truncateFile(atOffset: 0) //Delete current file contents
+	fileHandle.write(data)
 }
 
 func addNewPeripheralUUIDToFile(uuid: String) {
 	var ids = [uuid]
 	
 	if let existingIDs = getUUIDSFromFile() {
-		ids.appendContentsOf(existingIDs)
+		ids.append(contentsOf: existingIDs)
 	}
 	
 	print("[main] Stored new peripheral UUID \'\(uuid)\'")
-	writeUUIDsToFile(ids)
+	writeUUIDsToFile(uuids: ids)
 }
 
 
@@ -244,43 +257,43 @@ func addNewPeripheralUUIDToFile(uuid: String) {
 
 // "rgbw", "set-color-rgbw"
 func setColorUsingRGBW(){
-	guard Process.arguments.count == 6 else	 { // self + command + 4 arguments = 6
+	guard CommandLine.arguments.count == 6 else	 { // self + command + 4 arguments = 6
 		print("[Error] Wrong number of arguments! Needs [red] [green] [blue] [white]")
 		exit(1)
 	}
 	
-	guard let red = Int(Process.arguments[2]) where (0...255).contains(red) else {
-		print("[Error] Red value (\(Process.arguments[2])) is not an Int or out of range (0-255)")
+	guard let red = Int(CommandLine.arguments[2]), (0...255).contains(red) else {
+		print("[Error] Red value (\(CommandLine.arguments[2])) is not an Int or out of range (0-255)")
 		exit(1)
 	}
 	
-	guard let green  = Int(Process.arguments[3]) where (0...255).contains(green) else {
-		print("[Error] Green value (\(Process.arguments[3])) is not an Int or out of range (0-255)")
+	guard let green  = Int(CommandLine.arguments[3]), (0...255).contains(green) else {
+		print("[Error] Green value (\(CommandLine.arguments[3])) is not an Int or out of range (0-255)")
 		exit(1)
 	}
 	
-	guard let blue  = Int(Process.arguments[4]) where (0...255).contains(blue) else {
-		print("[Error] Blue value (\(Process.arguments[4])) is not an Int or out of range (0-255)")
+	guard let blue  = Int(CommandLine.arguments[4]), (0...255).contains(blue) else {
+		print("[Error] Blue value (\(CommandLine.arguments[4])) is not an Int or out of range (0-255)")
 		exit(1)
 	}
 	
-	guard let white = Int(Process.arguments[5]) where (0...255).contains(white) else {
-		print("[Error] White value (\(Process.arguments[5])) is not an Int or out of range (0-255)")
+	guard let white = Int(CommandLine.arguments[5]), (0...255).contains(white) else {
+		print("[Error] White value (\(CommandLine.arguments[5])) is not an Int or out of range (0-255)")
 		exit(1)
 	}
 	
 	print("[setColor] Red: \(red), Green: \(green), Blue: \(blue), White: \(white)")
-	Avea().setColor(Color(red: red, green: green, blue: blue, white: white), peripheralUUIDs: getUUIDSFromFile(), newPeripheralHandler: addNewPeripheralUUIDToFile)
+	Avea().set(color: Color(red: red, green: green, blue: blue, white: white), peripheralUUIDs: getUUIDSFromFile(), newPeripheralHandler: addNewPeripheralUUIDToFile)
 }
 
 // "c", "set-color"
 func setColorUsingDescriptor(){
-	guard Process.arguments.count == 3 else	 { // self + command + 1 arguments = 3
+	guard CommandLine.arguments.count == 3 else	 { // self + command + 1 arguments = 3
 		print("[Error] Wrong number of arguments! See help for usage details")
 		exit(1)
 	}
 	
-	let input = Process.arguments[2]
+	let input = CommandLine.arguments[2]
 	
 	guard let colorDescriptors = getColorDescriptorsFromFile() else {
 		print("Colors not loaded, exiting")
@@ -289,7 +302,7 @@ func setColorUsingDescriptor(){
 	
 	for colorDescriptor in colorDescriptors where colorDescriptor.title == input {
 		print("[setColor] \(input) - Red: \(colorDescriptor.color.red), Green: \(colorDescriptor.color.green), Blue: \(colorDescriptor.color.blue), White: \(colorDescriptor.color.white)")
-		Avea().setColor(colorDescriptor.color, peripheralUUIDs: getUUIDSFromFile(), newPeripheralHandler: addNewPeripheralUUIDToFile)
+		Avea().set(color: colorDescriptor.color, peripheralUUIDs: getUUIDSFromFile(), newPeripheralHandler: addNewPeripheralUUIDToFile)
 		return
 	}
 	
@@ -299,27 +312,27 @@ func setColorUsingDescriptor(){
 
 // "b", "set-brightness"
 func setBrightness(){
-	guard Process.arguments.count == 3 else	 { // self + command + 1 argument = 3
+	guard CommandLine.arguments.count == 3 else	 { // self + command + 1 argument = 3
 		print("[Error] Wrong number of arguments! See help for usage details")
 		exit(1)
 	}
 	
 	
-	guard let brightness = Int(Process.arguments[2]) where (0...255).contains(brightness) else {
-		print("[Error] Brightness value (\(Process.arguments[2])) is not an Int or out of range (0-255)")
+	guard let brightness = Int(CommandLine.arguments[2]), (0...255).contains(brightness) else {
+		print("[Error] Brightness value (\(CommandLine.arguments[2])) is not an Int or out of range (0-255)")
 		exit(1)
 	}
 	
 	print("[setBrightness] Setting brightness to \(brightness)/255")
 	
-	Avea().setBrightness(brightness, peripheralUUIDs: getUUIDSFromFile(), newPeripheralHandler: addNewPeripheralUUIDToFile)
+	Avea().set(brightness: brightness, peripheralUUIDs: getUUIDSFromFile(), newPeripheralHandler: addNewPeripheralUUIDToFile)
 }
 
 
 // "off"
 func turnOff(){
 	print("[main] Turning off Avea")
-	Avea().setColor(Color(red: 0, green: 0, blue: 0, white: 0), peripheralUUIDs: getUUIDSFromFile(), newPeripheralHandler: addNewPeripheralUUIDToFile)
+	Avea().set(color: Color(red: 0, green: 0, blue: 0, white: 0), peripheralUUIDs: getUUIDSFromFile(), newPeripheralHandler: addNewPeripheralUUIDToFile)
 }
 
 // "show-colors"
@@ -337,30 +350,30 @@ func showColorDescriptors(){
 
 // "add-color"
 func addColor(){
-	guard Process.arguments.count == 7 else { // self + command + 5 arguments = 7
+	guard CommandLine.arguments.count == 7 else { // self + command + 5 arguments = 7
 		print("[Error] Wrong number of arguments! See help for usage details")
 		exit(1)
 	}
 	
-	let title = Process.arguments[2]
+	let title = CommandLine.arguments[2]
 	
-	guard let red = Int(Process.arguments[3]) where (0...255).contains(red) else {
-		print("[Error] Red value (\(Process.arguments[3])) is not an Int or out of range (0-255)")
+	guard let red = Int(CommandLine.arguments[3]), (0...255).contains(red) else {
+		print("[Error] Red value (\(CommandLine.arguments[3])) is not an Int or out of range (0-255)")
 		exit(1)
 	}
 	
-	guard let green  = Int(Process.arguments[4]) where (0...255).contains(green) else {
-		print("[Error] Green value (\(Process.arguments[4])) is not an Int or out of range (0-255)")
+	guard let green  = Int(CommandLine.arguments[4]), (0...255).contains(green) else {
+		print("[Error] Green value (\(CommandLine.arguments[4])) is not an Int or out of range (0-255)")
 		exit(1)
 	}
 	
-	guard let blue  = Int(Process.arguments[5]) where (0...255).contains(blue) else {
-		print("[Error] Blue value (\(Process.arguments[5])) is not an Int or out of range (0-255)")
+	guard let blue  = Int(CommandLine.arguments[5]), (0...255).contains(blue) else {
+		print("[Error] Blue value (\(CommandLine.arguments[5])) is not an Int or out of range (0-255)")
 		exit(1)
 	}
 	
-	guard let white = Int(Process.arguments[6]) where (0...255).contains(white) else {
-		print("[Error] White value (\(Process.arguments[6])) is not an Int or out of range (0-255)")
+	guard let white = Int(CommandLine.arguments[6]), (0...255).contains(white) else {
+		print("[Error] White value (\(CommandLine.arguments[6])) is not an Int or out of range (0-255)")
 		exit(1)
 	}
 	
@@ -379,31 +392,31 @@ func addColor(){
 	var newColorDescriptors = colorDescriptors //mutable copy
 	newColorDescriptors.append(addedColorDescriptor)
 	
-	guard let jsonData = getJSONDataForColorDescriptors(newColorDescriptors) else {
+	guard let jsonData = getJSONData(forColorDescriptors: newColorDescriptors) else {
 		exit(1)
 	}
 	
-	let directoryPath = NSString(string: Constants.AveaDirectoryPath).stringByExpandingTildeInPath
-	let colorFilePath = directoryPath.stringByAppendingString("/\(Constants.ColorDescriptorFile)")
+	let directoryPath = NSString(string: Constants.aveaDirectoryPath).expandingTildeInPath
+	let colorFilePath = directoryPath.appending("/\(Constants.colorDescriptorFile)")
 	
-	guard let fileHandle = NSFileHandle(forUpdatingAtPath: colorFilePath) else {
+	guard let fileHandle = FileHandle(forUpdatingAtPath: colorFilePath) else {
 		print("[Error] Can't write to color JSON file, exiting")
 		exit(1)
 	}
 	
-	fileHandle.truncateFileAtOffset(0) //Delete current file contents
-	fileHandle.writeData(jsonData)
+	fileHandle.truncateFile(atOffset: 0) //Delete current file contents
+	fileHandle.write(jsonData)
 	print("[main] \'\(addedColorDescriptor.title)\' added to colors")
 }
 
 // "delete-color"
 func deleteColor(){
-	guard Process.arguments.count == 3 else { // self + command + 1 argument = 3
+	guard CommandLine.arguments.count == 3 else { // self + command + 1 argument = 3
 		print("[Error] Wrong number of arguments! See help for usage details")
 		exit(1)
 	}
 	
-	let title = Process.arguments[2]
+	let title = CommandLine.arguments[2]
 	
 	guard let colorDescriptors = getColorDescriptorsFromFile() else {
 		print("[Error] Can't get colors from file, exiting")
@@ -412,8 +425,8 @@ func deleteColor(){
 	
 	var newColorDescriptors = colorDescriptors //mutable copy
 	
-	for (index, colorDescriptor) in colorDescriptors.enumerate() where colorDescriptor.title == title {
-		newColorDescriptors.removeAtIndex(index)
+	for (index, colorDescriptor) in colorDescriptors.enumerated() where colorDescriptor.title == title {
+		newColorDescriptors.remove(at: index)
 	}
 	
 	guard newColorDescriptors.count < colorDescriptors.count else { //no color removed
@@ -421,21 +434,21 @@ func deleteColor(){
 		exit(1)
 	}
 	
-	guard let jsonData = getJSONDataForColorDescriptors(newColorDescriptors) else {
+	guard let jsonData = getJSONData(forColorDescriptors: newColorDescriptors) else {
 		exit(1)
 	}
 	
 	
-	let directoryPath = NSString(string: Constants.AveaDirectoryPath).stringByExpandingTildeInPath
-	let colorFilePath = directoryPath.stringByAppendingString("/\(Constants.ColorDescriptorFile)")
+	let directoryPath = NSString(string: Constants.aveaDirectoryPath).expandingTildeInPath
+	let colorFilePath = directoryPath.appending("/\(Constants.colorDescriptorFile)")
 	
-	guard let fileHandle = NSFileHandle(forUpdatingAtPath: colorFilePath) else {
+	guard let fileHandle = FileHandle(forUpdatingAtPath: colorFilePath) else {
 		print("[Error] Can't write to color JSON file, exiting")
 		exit(1)
 	}
 	
-	fileHandle.truncateFileAtOffset(0) //Delete current file contents
-	fileHandle.writeData(jsonData)
+	fileHandle.truncateFile(atOffset: 0) //Delete current file contents
+	fileHandle.write(jsonData)
 	print("[main] \'\(title)\' removed from colors")
 }
 
@@ -495,13 +508,13 @@ guard setupAveaFiles() else {
 }
 
 
-guard Process.arguments.count > 1 else {
+guard CommandLine.arguments.count > 1 else {
 	printHelp()
 	exit(1)
 }
 
 
-switch Process.arguments[1] {
+switch CommandLine.arguments[1] {
 	
 case "rgbw", "set-color-rgbw":
 	setColorUsingRGBW()
