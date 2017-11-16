@@ -2,8 +2,6 @@
 //  Avea.swift
 //  Avea
 //
-//  Created by Jonas on 13/02/16.
-//  Copyright © 2016 VFUC. All rights reserved.
 
 import Foundation
 

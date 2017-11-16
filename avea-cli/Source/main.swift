@@ -2,8 +2,6 @@
 
 import Foundation
 
-
-
 private struct Constants {
 	static let aveaDirectoryPath = "~/.avea"
 	static let colorDescriptorFile = "avea-colors.json"

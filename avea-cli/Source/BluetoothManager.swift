@@ -2,9 +2,6 @@
 //  BluetoothManager.swift
 //  Avea
 //
-//  Created by Jonas on 13/02/16.
-//  Copyright © 2016 VFUC. All rights reserved.
-//
 
 import Foundation
 import CoreBluetooth
@@ -35,11 +32,11 @@ class BluetoothManager: NSObject {
 	
 	fileprivate var mode: Mode?
 	fileprivate var bytesToSend : [UInt8]?
-	fileprivate var writeCompletionHandler : ((Void) -> Void)?
+	fileprivate var writeCompletionHandler : (() -> Void)?
 	var peripheralUUIDs : [String]? = nil
 	var newUUIDHandler : ((String) -> Void)?
 	
-	func sendBytes(bytes: [UInt8], completionHandler : ((Void) -> Void)? = nil){
+	func sendBytes(bytes: [UInt8], completionHandler : (() -> Void)? = nil){
 		mode = .Write
 		bytesToSend = bytes
 		writeCompletionHandler = completionHandler
@@ -64,8 +61,8 @@ extension BluetoothManager : CBCentralManagerDelegate {
 	
 	func centralManagerDidUpdateState(_ central: CBCentralManager) {
 		print("[CentralManager] State: \(central.state)")
-		
-		if (central.state == CBCentralManagerState.poweredOn){
+
+		if (central.state == .poweredOn){
 			print("[CentralManager] Powered On")
 			
 			if let uuidStrings = peripheralUUIDs {
