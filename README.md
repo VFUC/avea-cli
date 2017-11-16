@@ -6,7 +6,7 @@ The script currently starts up and looks for the first Bluetooth LE device conta
 
 The implementation wouldn't be possible without knowing the details of which bytes to send, so kudos to [Marmelatze](https://github.com/Marmelatze/avea_node) for figuring that out.
 
-**Requirements**: macOS 10.0, Swift 3
+**Requirements**: macOS, Xcode (command line tools), Swift 3+
 
 <br>
 
@@ -21,22 +21,23 @@ The implementation wouldn't be possible without knowing the details of which byt
 
 <br>
 
-- Run the `build.sh` script to compile the binary
+- Run the `xcodebuild build` script to compile the binary
 
-	`$ ./build.sh`
+	`$ xcodebuild build`
 
 <br>
 
+The binary will be compiled to `build/Release/`
+- Run the binary
 
-- Run the binary in the folder
-
-	`$ ./avea`
+	`$ build/Release/avea`
 
 <br>
 or if you're feeling fancy you can 
-- Link the binary to `/usr/local/bin` to be able to run it everywhere (replace the link with the path to the compiled binary): 
 
-	`$ sudo cp [link/to/compiled/avea] /usr/local/bin/`
+- Link the binary to `/usr/local/bin` to be able to run it everywhere: 
+
+	`$ sudo cp build/Release/avea /usr/local/bin/`
 
 <br>
 
