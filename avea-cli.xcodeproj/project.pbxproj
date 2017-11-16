@@ -26,7 +26,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		722B95231FBE305000782313 /* avea-cli */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "avea-cli"; sourceTree = BUILT_PRODUCTS_DIR; };
+		722B95231FBE305000782313 /* avea */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = avea; sourceTree = BUILT_PRODUCTS_DIR; };
 		722B95261FBE305000782313 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		722B952D1FBE308D00782313 /* BluetoothManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BluetoothManager.swift; sourceTree = "<group>"; };
 		722B952E1FBE308D00782313 /* Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
@@ -55,7 +55,7 @@
 		722B95241FBE305000782313 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				722B95231FBE305000782313 /* avea-cli */,
+				722B95231FBE305000782313 /* avea */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -74,9 +74,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		722B95221FBE305000782313 /* avea-cli */ = {
+		722B95221FBE305000782313 /* avea */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 722B952A1FBE305000782313 /* Build configuration list for PBXNativeTarget "avea-cli" */;
+			buildConfigurationList = 722B952A1FBE305000782313 /* Build configuration list for PBXNativeTarget "avea" */;
 			buildPhases = (
 				722B951F1FBE305000782313 /* Sources */,
 				722B95201FBE305000782313 /* Frameworks */,
@@ -86,9 +86,9 @@
 			);
 			dependencies = (
 			);
-			name = "avea-cli";
+			name = avea;
 			productName = "avea-cli";
-			productReference = 722B95231FBE305000782313 /* avea-cli */;
+			productReference = 722B95231FBE305000782313 /* avea */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -118,7 +118,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				722B95221FBE305000782313 /* avea-cli */,
+				722B95221FBE305000782313 /* avea */,
 			);
 		};
 /* End PBXProject section */
@@ -274,7 +274,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		722B952A1FBE305000782313 /* Build configuration list for PBXNativeTarget "avea-cli" */ = {
+		722B952A1FBE305000782313 /* Build configuration list for PBXNativeTarget "avea" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				722B952B1FBE305000782313 /* Debug */,
