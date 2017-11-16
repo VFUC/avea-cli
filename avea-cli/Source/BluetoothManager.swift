@@ -15,9 +15,6 @@ private enum Mode {
 	case Write
 }
 
-
-
-
 class BluetoothManager: NSObject {
 	
 	fileprivate var centralManager: CBCentralManager? = nil
@@ -45,20 +42,16 @@ class BluetoothManager: NSObject {
 }
 
 
-
-extension BluetoothManager : CBCentralManagerDelegate {
+extension BluetoothManager: CBCentralManagerDelegate {
 	
 	func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-		
 		if let name = peripheral.name, name.contains("Avea"){
 			print("[CentralManager] Discovered peripheral \'\(name)\'")
 			newUUIDHandler?(peripheral.identifier.uuidString)
 			aveaPeripheral = peripheral
 		}
-		
 	}
-	
-	
+
 	func centralManagerDidUpdateState(_ central: CBCentralManager) {
 		print("[CentralManager] State: \(central.state)")
 
@@ -99,14 +92,11 @@ extension BluetoothManager : CBCentralManagerDelegate {
 	}
 }
 
-
-
-extension BluetoothManager : CBPeripheralDelegate {
+extension BluetoothManager: CBPeripheralDelegate {
 	
 	func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
 		print("[CBPeripheral] Found service")
-		
-		
+
 		if let services = peripheral.services {
 			for service in services where service.uuid.uuidString == Constants.ColorServiceUUID {
 				peripheral.discoverCharacteristics([CBUUID(string: Constants.ColorCharacteristicUUID)], for: service)
@@ -126,10 +116,9 @@ extension BluetoothManager : CBPeripheralDelegate {
 			print("[Error] Mode not set")
 			return
 		}
-		
+
 		for char in characteristics where char.uuid.uuidString == Constants.ColorCharacteristicUUID {
-			
-			
+
 			switch mode {
 				
 			case .Write:
@@ -140,33 +129,25 @@ extension BluetoothManager : CBPeripheralDelegate {
 					
 					peripheral.writeValue(data, for: char, type: .withResponse)
 				}
-				
 			}
-			
 		}
 	}
 	
 	func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
 		print("[CBPeripheral] Data sent")
-		
-		
+
 		guard let mode = mode else {
 			print("[Error] Mode not set")
 			return
 		}
 		
 		switch mode {
-			
 		case .Write:
 			self.writeCompletionHandler?()
-			
 		}
-		
 	}
 	
 	func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
 		print("[CBPeripheral] Received data")
 	}
 }
-
-
