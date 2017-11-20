@@ -21,7 +21,7 @@ The implementation wouldn't be possible without knowing the details of which byt
 
 <br>
 
-- Run the `xcodebuild build` script to compile the binary
+- Run `xcodebuild build` to compile the binary
 
 	`$ xcodebuild build`
 
