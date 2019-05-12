@@ -6,40 +6,24 @@ The script currently starts up and looks for the first Bluetooth LE device conta
 
 The implementation wouldn't be possible without knowing the details of which bytes to send, so kudos to [Marmelatze](https://github.com/Marmelatze/avea_node) for figuring that out.
 
-**Requirements**: macOS, Xcode (command line tools), Swift 3+
-
-<br>
+**Requirements**: macOS, Xcode (command line tools), Swift 5
 
 ## 🛠 Setup
-**Note: Xcode is required to compile the executable**
 
-- Clone the repo
+Clone the repo
 
-	`$ git clone https://github.com/vfuc/avea-cli`
-	<br>
-	`$ cd avea-cli`
+`$ git clone https://github.com/vfuc/avea-cli`
+`$ cd avea-cli`
 
-<br>
+Compile the binary
 
-- Run `xcodebuild build` to compile the binary
+`$ swift build -c release`
 
-	`$ xcodebuild build`
+The binary will be compiled to `./.build/x86_64-apple-macosx/release/avea-cli`
 
-<br>
+To be able to run it anywhere, copy the binary to `/usr/local/bin` 
 
-The binary will be compiled to `build/Release/`
-- Run the binary
-
-	`$ build/Release/avea`
-
-<br>
-or if you're feeling fancy you can 
-
-- Link the binary to `/usr/local/bin` to be able to run it everywhere: 
-
-	`$ sudo cp build/Release/avea /usr/local/bin/`
-
-<br>
+`$ cp ./.build/x86_64-apple-macosx/release/avea-cli /usr/local/bin/avea`
 
 ## 🎛 Usage
 
@@ -101,14 +85,12 @@ $ avea add-color [descriptor] [red] [green] [blue] [white]
 ```sh
 $ avea delete-color [descriptor]
 ```
-<br>
 
 ## 🤔 Caveats
 At the moment I only have a single "avea bulb", so I haven't worked on multi-device support yet and don't know if it works with the "sphere" and "flare" products as well.
 
 Occasionally, the bulb is not discoverable and the script will look for it indefinitely. This seems to be an issue with the bulb itself though, as I experience it with the iOS client as well. 
 
-<br>
 
 ## 🙋 Contributing
 Issues and Pull Requests are welcome, of course :)
