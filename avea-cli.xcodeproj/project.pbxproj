@@ -3,40 +3,76 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 48;
+	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		"avea-cli::avea-cliPackageTests::ProductTarget" /* avea-cliPackageTests */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = OBJ_38 /* Build configuration list for PBXAggregateTarget "avea-cliPackageTests" */;
+			buildPhases = (
+			);
+			dependencies = (
+				OBJ_41 /* PBXTargetDependency */,
+			);
+			name = "avea-cliPackageTests";
+			productName = "avea-cliPackageTests";
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
-		722B95271FBE305000782313 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 722B95261FBE305000782313 /* main.swift */; };
-		722B95301FBE308D00782313 /* BluetoothManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 722B952D1FBE308D00782313 /* BluetoothManager.swift */; };
-		722B95311FBE308D00782313 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 722B952E1FBE308D00782313 /* Color.swift */; };
-		722B95321FBE308D00782313 /* Avea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 722B952F1FBE308D00782313 /* Avea.swift */; };
+		72162382223E958200D58427 /* CBPeripheral+Workaround.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72162381223E958200D58427 /* CBPeripheral+Workaround.swift */; };
+		OBJ_26 /* Avea.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* Avea.swift */; };
+		OBJ_27 /* BluetoothManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* BluetoothManager.swift */; };
+		OBJ_28 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* Color.swift */; };
+		OBJ_29 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* main.swift */; };
+		OBJ_36 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
+		OBJ_47 /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_15 /* XCTestManifests.swift */; };
+		OBJ_48 /* avea_cliTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_16 /* avea_cliTests.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		722B95211FBE305000782313 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
+/* Begin PBXContainerItemProxy section */
+		7216237F223E922E00D58427 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "avea-cli::avea-cli";
+			remoteInfo = "avea-cli";
 		};
-/* End PBXCopyFilesBuildPhase section */
+		72162380223E923100D58427 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "avea-cli::avea-cliTests";
+			remoteInfo = "avea-cliTests";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		722B95231FBE305000782313 /* avea */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = avea; sourceTree = BUILT_PRODUCTS_DIR; };
-		722B95261FBE305000782313 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		722B952D1FBE308D00782313 /* BluetoothManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BluetoothManager.swift; sourceTree = "<group>"; };
-		722B952E1FBE308D00782313 /* Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
-		722B952F1FBE308D00782313 /* Avea.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Avea.swift; sourceTree = "<group>"; };
+		72162381223E958200D58427 /* CBPeripheral+Workaround.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CBPeripheral+Workaround.swift"; sourceTree = "<group>"; };
+		OBJ_10 /* BluetoothManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothManager.swift; sourceTree = "<group>"; };
+		OBJ_11 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		OBJ_12 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		OBJ_15 /* XCTestManifests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestManifests.swift; sourceTree = "<group>"; };
+		OBJ_16 /* avea_cliTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = avea_cliTests.swift; sourceTree = "<group>"; };
+		OBJ_17 /* build */ = {isa = PBXFileReference; lastKnownFileType = folder; path = build; sourceTree = SOURCE_ROOT; };
+		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		OBJ_9 /* Avea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Avea.swift; sourceTree = "<group>"; };
+		"avea-cli::avea-cli::Product" /* avea-cli */ = {isa = PBXFileReference; lastKnownFileType = text; path = "avea-cli"; sourceTree = BUILT_PRODUCTS_DIR; };
+		"avea-cli::avea-cliTests::Product" /* avea-cliTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = "avea-cliTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		722B95201FBE305000782313 /* Frameworks */ = {
+		OBJ_30 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_49 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -44,136 +80,260 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		722B951A1FBE305000782313 = {
+		OBJ_13 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				722B95251FBE305000782313 /* Source */,
-				722B95241FBE305000782313 /* Products */,
+				OBJ_14 /* avea-cliTests */,
 			);
-			sourceTree = "<group>";
+			name = Tests;
+			sourceTree = SOURCE_ROOT;
 		};
-		722B95241FBE305000782313 /* Products */ = {
+		OBJ_14 /* avea-cliTests */ = {
 			isa = PBXGroup;
 			children = (
-				722B95231FBE305000782313 /* avea */,
+				OBJ_15 /* XCTestManifests.swift */,
+				OBJ_16 /* avea_cliTests.swift */,
+			);
+			name = "avea-cliTests";
+			path = "Tests/avea-cliTests";
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_18 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				"avea-cli::avea-cliTests::Product" /* avea-cliTests.xctest */,
+				"avea-cli::avea-cli::Product" /* avea-cli */,
 			);
 			name = Products;
-			sourceTree = "<group>";
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		722B95251FBE305000782313 /* Source */ = {
+		OBJ_5 /*  */ = {
 			isa = PBXGroup;
 			children = (
-				722B952F1FBE308D00782313 /* Avea.swift */,
-				722B952D1FBE308D00782313 /* BluetoothManager.swift */,
-				722B952E1FBE308D00782313 /* Color.swift */,
-				722B95261FBE305000782313 /* main.swift */,
+				OBJ_6 /* Package.swift */,
+				OBJ_7 /* Sources */,
+				OBJ_13 /* Tests */,
+				OBJ_17 /* build */,
+				OBJ_18 /* Products */,
 			);
-			path = Source;
+			name = "";
 			sourceTree = "<group>";
+		};
+		OBJ_7 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_8 /* avea-cli */,
+			);
+			name = Sources;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_8 /* avea-cli */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_9 /* Avea.swift */,
+				OBJ_10 /* BluetoothManager.swift */,
+				72162381223E958200D58427 /* CBPeripheral+Workaround.swift */,
+				OBJ_11 /* Color.swift */,
+				OBJ_12 /* main.swift */,
+			);
+			name = "avea-cli";
+			path = "Sources/avea-cli";
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		722B95221FBE305000782313 /* avea */ = {
+		"avea-cli::SwiftPMPackageDescription" /* avea-cliPackageDescription */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 722B952A1FBE305000782313 /* Build configuration list for PBXNativeTarget "avea" */;
+			buildConfigurationList = OBJ_32 /* Build configuration list for PBXNativeTarget "avea-cliPackageDescription" */;
 			buildPhases = (
-				722B951F1FBE305000782313 /* Sources */,
-				722B95201FBE305000782313 /* Frameworks */,
-				722B95211FBE305000782313 /* CopyFiles */,
+				OBJ_35 /* Sources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = avea;
-			productName = "avea-cli";
-			productReference = 722B95231FBE305000782313 /* avea */;
+			name = "avea-cliPackageDescription";
+			productName = "avea-cliPackageDescription";
+			productType = "com.apple.product-type.framework";
+		};
+		"avea-cli::avea-cli" /* avea-cli */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_22 /* Build configuration list for PBXNativeTarget "avea-cli" */;
+			buildPhases = (
+				OBJ_25 /* Sources */,
+				OBJ_30 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "avea-cli";
+			productName = avea_cli;
+			productReference = "avea-cli::avea-cli::Product" /* avea-cli */;
 			productType = "com.apple.product-type.tool";
+		};
+		"avea-cli::avea-cliTests" /* avea-cliTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_43 /* Build configuration list for PBXNativeTarget "avea-cliTests" */;
+			buildPhases = (
+				OBJ_46 /* Sources */,
+				OBJ_49 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_50 /* PBXTargetDependency */,
+			);
+			name = "avea-cliTests";
+			productName = avea_cliTests;
+			productReference = "avea-cli::avea-cliTests::Product" /* avea-cliTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		722B951B1FBE305000782313 /* Project object */ = {
+		OBJ_1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0900;
-				LastUpgradeCheck = 0900;
-				TargetAttributes = {
-					722B95221FBE305000782313 = {
-						CreatedOnToolsVersion = 9.0.1;
-						ProvisioningStyle = Automatic;
-					};
-				};
+				LastUpgradeCheck = 1010;
 			};
-			buildConfigurationList = 722B951E1FBE305000782313 /* Build configuration list for PBXProject "avea-cli" */;
-			compatibilityVersion = "Xcode 8.0";
-			developmentRegion = en;
+			buildConfigurationList = OBJ_2 /* Build configuration list for PBXProject "avea-cli" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 			);
-			mainGroup = 722B951A1FBE305000782313;
-			productRefGroup = 722B95241FBE305000782313 /* Products */;
+			mainGroup = OBJ_5 /*  */;
+			productRefGroup = OBJ_18 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				722B95221FBE305000782313 /* avea */,
+				"avea-cli::avea-cli" /* avea-cli */,
+				"avea-cli::SwiftPMPackageDescription" /* avea-cliPackageDescription */,
+				"avea-cli::avea-cliPackageTests::ProductTarget" /* avea-cliPackageTests */,
+				"avea-cli::avea-cliTests" /* avea-cliTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		722B951F1FBE305000782313 /* Sources */ = {
+		OBJ_25 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 0;
 			files = (
-				722B95301FBE308D00782313 /* BluetoothManager.swift in Sources */,
-				722B95271FBE305000782313 /* main.swift in Sources */,
-				722B95321FBE308D00782313 /* Avea.swift in Sources */,
-				722B95311FBE308D00782313 /* Color.swift in Sources */,
+				OBJ_26 /* Avea.swift in Sources */,
+				OBJ_27 /* BluetoothManager.swift in Sources */,
+				72162382223E958200D58427 /* CBPeripheral+Workaround.swift in Sources */,
+				OBJ_28 /* Color.swift in Sources */,
+				OBJ_29 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_35 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_36 /* Package.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_46 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_47 /* XCTestManifests.swift in Sources */,
+				OBJ_48 /* avea_cliTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		OBJ_41 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "avea-cli::avea-cliTests" /* avea-cliTests */;
+			targetProxy = 72162380223E923100D58427 /* PBXContainerItemProxy */;
+		};
+		OBJ_50 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "avea-cli::avea-cli" /* avea-cli */;
+			targetProxy = 7216237F223E922E00D58427 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
-		722B95281FBE305000782313 /* Debug */ = {
+		OBJ_23 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = "avea-cli.xcodeproj/avea_cli_Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path";
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_FORCE_DYNAMIC_LINK_STDLIB = YES;
+				SWIFT_FORCE_STATIC_LINK_STDLIB = NO;
+				SWIFT_VERSION = 4.2;
+				TARGET_NAME = "avea-cli";
+			};
+			name = Debug;
+		};
+		OBJ_24 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = "avea-cli.xcodeproj/avea_cli_Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path";
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_FORCE_DYNAMIC_LINK_STDLIB = YES;
+				SWIFT_FORCE_STATIC_LINK_STDLIB = NO;
+				SWIFT_VERSION = 4.2;
+				TARGET_NAME = "avea-cli";
+			};
+			name = Release;
+		};
+		OBJ_3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -181,109 +341,189 @@
 					"$(inherited)",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MTL_ENABLE_DEBUG_INFO = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_SWIFT_FLAGS = "-DXcode";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator watchos watchsimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "SWIFT_PACKAGE DEBUG";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				USE_HEADERMAP = NO;
 			};
 			name = Debug;
 		};
-		722B95291FBE305000782313 /* Release */ = {
+		OBJ_33 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 4.2 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk";
+				SWIFT_VERSION = 4.2;
+			};
+			name = Debug;
+		};
+		OBJ_34 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 4.2 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk";
+				SWIFT_VERSION = 4.2;
+			};
+			name = Release;
+		};
+		OBJ_39 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		OBJ_4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
-				COPY_PHASE_STRIP = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MTL_ENABLE_DEBUG_INFO = NO;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				OTHER_SWIFT_FLAGS = "-DXcode";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator watchos watchsimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				USE_HEADERMAP = NO;
 			};
 			name = Release;
 		};
-		722B952B1FBE305000782313 /* Debug */ = {
+		OBJ_40 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
+		OBJ_44 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = "avea-cli.xcodeproj/avea_cliTests_Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @loader_path/Frameworks";
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 4.2;
+				TARGET_NAME = "avea-cliTests";
 			};
 			name = Debug;
 		};
-		722B952C1FBE305000782313 /* Release */ = {
+		OBJ_45 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = "avea-cli.xcodeproj/avea_cliTests_Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @loader_path/Frameworks";
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_VERSION = 4.2;
+				TARGET_NAME = "avea-cliTests";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		722B951E1FBE305000782313 /* Build configuration list for PBXProject "avea-cli" */ = {
+		OBJ_2 /* Build configuration list for PBXProject "avea-cli" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				722B95281FBE305000782313 /* Debug */,
-				722B95291FBE305000782313 /* Release */,
+				OBJ_3 /* Debug */,
+				OBJ_4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		722B952A1FBE305000782313 /* Build configuration list for PBXNativeTarget "avea" */ = {
+		OBJ_22 /* Build configuration list for PBXNativeTarget "avea-cli" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				722B952B1FBE305000782313 /* Debug */,
-				722B952C1FBE305000782313 /* Release */,
+				OBJ_23 /* Debug */,
+				OBJ_24 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_32 /* Build configuration list for PBXNativeTarget "avea-cliPackageDescription" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_33 /* Debug */,
+				OBJ_34 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_38 /* Build configuration list for PBXAggregateTarget "avea-cliPackageTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_39 /* Debug */,
+				OBJ_40 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		OBJ_43 /* Build configuration list for PBXNativeTarget "avea-cliTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_44 /* Debug */,
+				OBJ_45 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 722B951B1FBE305000782313 /* Project object */;
+	rootObject = OBJ_1 /* Project object */;
 }
