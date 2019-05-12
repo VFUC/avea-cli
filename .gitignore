@@ -10,3 +10,5 @@ xcuserdata/
 *xcuserdata/*
 
 build/*
+.build/*
+.DS_Store
